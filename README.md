@@ -154,9 +154,9 @@ tail -f /var/log/nginx/ba-dashboards-access.log
 If GitHub Actions is down, deploy manually:
 
 ```bash
-scp -r dashboards/* root@139.59.64.19:/var/www/ba-dashboards/generated/
-scp -r assets/* root@139.59.64.19:/var/www/ba-dashboards/assets/
-ssh root@139.59.64.19 "chown -R www-data:www-data /var/www/ba-dashboards"
+scp -r dashboards/* root@139.59.64.19:/root/gnopartners/generated/
+scp -r assets/* root@139.59.64.19:/root/gnopartners/assets/
+ssh root@139.59.64.19 "chown -R www-data:www-data /root/gnopartners"
 ```
 
 ---

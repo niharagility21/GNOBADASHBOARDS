@@ -12,7 +12,7 @@ echo ""
 # Configuration
 SERVER_IP="139.59.64.19"
 SERVER_USER="root"
-REMOTE_DIR="/var/www/ba-dashboards"
+REMOTE_DIR="/root/gnopartners"
 
 # Color codes for output
 GREEN='\033[0;32m'

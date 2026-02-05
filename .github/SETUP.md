@@ -96,8 +96,8 @@ Once setup is complete, the workflow is simple:
 2. **Commit and push** to GitHub (main branch)
 3. **GitHub Actions automatically**:
    - Connects to your server via SSH
-   - Deploys dashboards to `/var/www/ba-dashboards/generated/`
-   - Deploys assets to `/var/www/ba-dashboards/assets/`
+   - Deploys dashboards to `/root/gnopartners/generated/`
+   - Deploys assets to `/root/gnopartners/assets/`
    - Sets correct permissions
    - Dashboards go live instantly!
 
@@ -147,8 +147,8 @@ Go to: `Repository Settings → Secrets and variables → Actions → Update sec
 If GitHub Actions is down, you can still deploy manually:
 
 ```bash
-scp -r dashboards/* root@139.59.64.19:/var/www/ba-dashboards/generated/
-scp -r assets/* root@139.59.64.19:/var/www/ba-dashboards/assets/
+scp -r dashboards/* root@139.59.64.19:/root/gnopartners/generated/
+scp -r assets/* root@139.59.64.19:/root/gnopartners/assets/
 ```
 
 ---

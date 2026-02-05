@@ -61,7 +61,7 @@ chmod +x server-setup.sh
 The script will:
 - ✓ Update system packages
 - ✓ Install Nginx web server
-- ✓ Create directory structure at `/var/www/ba-dashboards`
+- ✓ Create directory structure at `/root/gnopartners`
 - ✓ Prompt you to create username and password
 - ✓ Configure Nginx with password protection
 - ✓ Set up firewall rules
@@ -106,15 +106,15 @@ If you prefer to deploy manually:
 
 ```bash
 # Deploy generated dashboards
-scp -r generated/* root@139.59.64.19:/var/www/ba-dashboards/generated/
+scp -r generated/* root@139.59.64.19:/root/gnopartners/generated/
 
 # Deploy assets
-scp -r src/assets/css/* root@139.59.64.19:/var/www/ba-dashboards/assets/css/
-scp -r src/assets/js/* root@139.59.64.19:/var/www/ba-dashboards/assets/js/
-scp -r src/assets/images/* root@139.59.64.19:/var/www/ba-dashboards/assets/images/
+scp -r src/assets/css/* root@139.59.64.19:/root/gnopartners/assets/css/
+scp -r src/assets/js/* root@139.59.64.19:/root/gnopartners/assets/js/
+scp -r src/assets/images/* root@139.59.64.19:/root/gnopartners/assets/images/
 
 # Set permissions
-ssh root@139.59.64.19 "chown -R www-data:www-data /var/www/ba-dashboards && chmod -R 755 /var/www/ba-dashboards"
+ssh root@139.59.64.19 "chown -R www-data:www-data /root/gnopartners && chmod -R 755 /root/gnopartners"
 ```
 
 ---
@@ -200,7 +200,7 @@ For detailed naming guidelines, see: [NAMING-GUIDE.md](NAMING-GUIDE.md)
 ## Server Directory Structure
 
 ```
-/var/www/ba-dashboards/
+/root/gnopartners/
 ├── generated/                  # Your dashboard HTML files
 │   └── supersonic-brands.html
 ├── assets/                     # Supporting assets
@@ -292,7 +292,7 @@ htpasswd /etc/nginx/auth/.htpasswd admin
 **Solution**: Verify files are deployed
 ```bash
 ssh root@139.59.64.19
-ls -la /var/www/ba-dashboards/generated/
+ls -la /root/gnopartners/generated/
 ```
 
 If empty, re-run deployment script.
@@ -302,13 +302,13 @@ If empty, re-run deployment script.
 **Solution**: Check assets directory
 ```bash
 ssh root@139.59.64.19
-ls -la /var/www/ba-dashboards/assets/
+ls -la /root/gnopartners/assets/
 ```
 
 Ensure files are present and permissions are correct:
 ```bash
-chown -R www-data:www-data /var/www/ba-dashboards
-chmod -R 755 /var/www/ba-dashboards
+chown -R www-data:www-data /root/gnopartners
+chmod -R 755 /root/gnopartners
 ```
 
 ### Problem: Firewall Blocking Access
@@ -416,8 +416,8 @@ For issues or questions:
 | Add user | `ssh root@139.59.64.19 'htpasswd /etc/nginx/auth/.htpasswd username'` |
 | Restart Nginx | `ssh root@139.59.64.19 'systemctl restart nginx'` |
 | Update server | `ssh root@139.59.64.19 'apt-get update && apt-get upgrade'` |
-| Rename dashboard | `ssh root@139.59.64.19 'cd /var/www/ba-dashboards/generated && mv old.html new.html'` |
-| List deployed dashboards | `ssh root@139.59.64.19 'ls -lh /var/www/ba-dashboards/generated/'` |
+| Rename dashboard | `ssh root@139.59.64.19 'cd /root/gnopartners/generated && mv old.html new.html'` |
+| List deployed dashboards | `ssh root@139.59.64.19 'ls -lh /root/gnopartners/generated/'` |
 
 ---
 

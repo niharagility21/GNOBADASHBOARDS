@@ -27,19 +27,19 @@ jobs:
       - name: Deploy dashboards to server
         id: deploy-dashboards
         run: |
-          scp -i ~/.ssh/deploy_key -r dashboards/* ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/var/www/ba-dashboards/generated/
+          scp -i ~/.ssh/deploy_key -r dashboards/* ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/root/gnopartners/generated/
           echo "✅ Dashboards deployed"
 
       - name: Deploy assets to server
         id: deploy-assets
         run: |
-          scp -i ~/.ssh/deploy_key -r assets/* ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/var/www/ba-dashboards/assets/
+          scp -i ~/.ssh/deploy_key -r assets/* ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/root/gnopartners/assets/
           echo "✅ Assets deployed"
 
       - name: Set permissions on server
         id: set-permissions
         run: |
-          ssh -i ~/.ssh/deploy_key ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} "chown -R www-data:www-data /var/www/ba-dashboards && chmod -R 755 /var/www/ba-dashboards"
+          ssh -i ~/.ssh/deploy_key ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} "chown -R www-data:www-data /root/gnopartners && chmod -R 755 /root/gnopartners"
           echo "✅ Permissions set"
 
       - name: Get deployed dashboard count
