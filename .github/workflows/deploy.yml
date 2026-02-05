@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - 'dashboards/**'
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -19,6 +20,13 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y sshpass
+
+      - name: Setup server directories
+        run: |
+          echo "Creating directories on server..."
+          sshpass -p 'TN@qwe4321n' ssh -o StrictHostKeyChecking=no -o ConnectTimeout=30 root@139.59.64.19 \
+            "mkdir -p /root/gnopartners/generated && chmod -R 755 /root/gnopartners"
+          echo "✅ Directories created"
 
       - name: Deploy dashboards to server
         run: |
@@ -91,60 +99,42 @@ jobs:
 
       - name: Send success email
         if: success()
-        uses: dawidd6/action-send-mail@v3
-        with:
-          server_address: smtp.gmail.com
-          server_port: 587
-          secure: false
-          username: agilitytechai@gmail.com
-          password: wfkp ggxu vyvg donh
-          subject: "✅ Dashboard Deployed Successfully"
-          to: iampreetdave@gmail.com,anshthakkar4904@gmail.com
-          from: GNO BA Dashboards <agilitytechai@gmail.com>
-          ignore_cert: true
-          convert_markdown: false
-          body: |
-            Dashboard deployment completed successfully!
-
-            🔗 Live Website URLs:
-            ${{ steps.get-urls.outputs.urls }}
-
-            📊 Deployment Details:
-            - Server: http://139.59.64.19
-            - Commit: ${{ github.sha }}
-            - Branch: ${{ github.ref_name }}
-            - Time: ${{ github.event.head_commit.timestamp }}
-
-            ✅ All dashboards are now live!
-
-            ---
-            GitHub Actions - GNO BA Dashboards
-
-      - name: Send failure email
-        if: failure()
-        uses: dawidd6/action-send-mail@v3
         continue-on-error: true
-        with:
-          server_address: smtp.gmail.com
-          server_port: 587
-          secure: false
-          username: agilitytechai@gmail.com
-          password: wfkp ggxu vyvg donh
-          subject: "❌ Dashboard Deployment Failed"
-          to: iampreetdave@gmail.com,anshthakkar4904@gmail.com
-          from: GNO BA Dashboards <agilitytechai@gmail.com>
-          ignore_cert: true
-          convert_markdown: false
-          body: |
-            Dashboard deployment failed!
+        run: |
+          URLS="${{ steps.get-urls.outputs.urls }}"
 
-            ❌ Deployment Details:
-            - Server: 139.59.64.19
-            - Commit: ${{ github.sha }}
-            - Branch: ${{ github.ref_name }}
+          # Send email using curl
+          curl -s --url 'smtps://smtp.gmail.com:465' \
+            --ssl-reqd \
+            --mail-from 'agilitytechai@gmail.com' \
+            --mail-rcpt 'iampreetdave@gmail.com' \
+            --mail-rcpt 'anshthakkar4904@gmail.com' \
+            --user 'agilitytechai@gmail.com:wfkp ggxu vyvg donh' \
+            -T - <<EOF
+          From: GNO BA Dashboards <agilitytechai@gmail.com>
+          To: iampreetdave@gmail.com,anshthakkar4904@gmail.com
+          Subject: ✅ Dashboard Deployed Successfully
 
-            🔍 Check the workflow run for details:
-            https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          Dashboard deployment completed successfully!
 
-            ---
-            GitHub Actions - GNO BA Dashboards
+          🔗 Live Website URLs:
+          $URLS
+
+          📊 Deployment Details:
+          - Server: http://139.59.64.19
+          - Commit: ${{ github.sha }}
+          - Branch: ${{ github.ref_name }}
+
+          ✅ All dashboards are now live!
+
+          ---
+          GitHub Actions - GNO BA Dashboards
+          EOF
+
+          echo "✅ Email sent (or skipped if failed)"
+
+      - name: Deployment complete
+        run: |
+          echo "✅ Deployment successful!"
+          echo "🔗 Live URLs:"
+          echo "${{ steps.get-urls.outputs.urls }}"
