@@ -24,3 +24,4 @@ temp/
 
 # Hosted marker (created by GitHub Actions)
 .hosted
+github-deploy-key
