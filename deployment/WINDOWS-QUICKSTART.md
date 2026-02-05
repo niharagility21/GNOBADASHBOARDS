@@ -87,13 +87,13 @@ From PowerShell in your project folder:
 
 ```powershell
 # Deploy dashboard files
-scp -r generated\* root@139.59.64.19:/var/www/ba-dashboards/generated/
+scp -r dashboards\* root@139.59.64.19:/root/gnopartners/generated/
 
 # Deploy CSS files
-scp -r src\assets\css\* root@139.59.64.19:/var/www/ba-dashboards/assets/css/
+scp -r src\assets\css\* root@139.59.64.19:/root/gnopartners/assets/css/
 
 # Deploy JavaScript files
-scp -r src\assets\js\* root@139.59.64.19:/var/www/ba-dashboards/assets/js/
+scp -r src\assets\js\* root@139.59.64.19:/root/gnopartners/assets/js/
 ```
 
 Enter your root password each time when prompted.
@@ -103,8 +103,8 @@ Enter your root password each time when prompted.
 After uploading, run this in your SSH window:
 
 ```bash
-chown -R www-data:www-data /var/www/ba-dashboards
-chmod -R 755 /var/www/ba-dashboards
+chown -R www-data:www-data /root/gnopartners
+chmod -R 755 /root/gnopartners
 ```
 
 ---
@@ -147,7 +147,7 @@ dir generated\
 **Solution**: Make sure you deployed the assets folder:
 
 ```powershell
-scp -r src\assets\* root@139.59.64.19:/var/www/ba-dashboards/assets/
+scp -r src\assets\* root@139.59.64.19:/root/gnopartners/assets/
 ```
 
 ### "Connection refused" in browser
@@ -204,16 +204,16 @@ If you prefer a GUI instead of command line:
    - Password: [your root password]
    - Click "Login"
 
-4. **Navigate on server** to: `/var/www/ba-dashboards/`
+4. **Navigate on server** to: `/root/gnopartners/`
 
 5. **Drag and drop**:
-   - Drag `generated/*` to `/var/www/ba-dashboards/generated/`
-   - Drag `src/assets/*` to `/var/www/ba-dashboards/assets/`
+   - Drag `generated/*` to `/root/gnopartners/generated/`
+   - Drag `src/assets/*` to `/root/gnopartners/assets/`
 
 6. **Fix permissions** (in SSH window):
    ```bash
-   chown -R www-data:www-data /var/www/ba-dashboards
-   chmod -R 755 /var/www/ba-dashboards
+   chown -R www-data:www-data /root/gnopartners
+   chmod -R 755 /root/gnopartners
    ```
 
 Much easier! 😊
@@ -241,7 +241,7 @@ Follow the prompts to get a free SSL certificate.
 | Task | Command (PowerShell) |
 |------|---------------------|
 | Connect to server | `ssh root@139.59.64.19` |
-| Upload files | `scp -r generated\* root@139.59.64.19:/var/www/ba-dashboards/generated/` |
+| Upload files | `scp -r dashboards\* root@139.59.64.19:/root/gnopartners/generated/` |
 | Check if server is running | `ssh root@139.59.64.19 'systemctl status nginx'` |
 | Add new user | `ssh root@139.59.64.19 'htpasswd /etc/nginx/auth/.htpasswd newuser'` |
 

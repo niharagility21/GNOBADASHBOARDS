@@ -174,7 +174,7 @@ If you want to rename a dashboard:
 ### On Server:
 ```bash
 ssh root@139.59.64.19
-cd /var/www/ba-dashboards/generated/
+cd /root/gnopartners/generated/
 mv old-name.html new-name-abc123.html
 ```
 

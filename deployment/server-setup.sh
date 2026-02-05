@@ -26,14 +26,14 @@ apt-get install -y nginx apache2-utils
 
 # Create directory structure
 echo "3. Creating directory structure..."
-mkdir -p /var/www/ba-dashboards
-mkdir -p /var/www/ba-dashboards/generated
-mkdir -p /var/www/ba-dashboards/assets
+mkdir -p /root/gnopartners
+mkdir -p /root/gnopartners/generated
+mkdir -p /root/gnopartners/assets
 mkdir -p /etc/nginx/auth
 
 # Set permissions
-chown -R www-data:www-data /var/www/ba-dashboards
-chmod -R 755 /var/www/ba-dashboards
+chown -R www-data:www-data /root/gnopartners
+chmod -R 755 /root/gnopartners
 
 echo "4. Setting up password protection..."
 # Prompt for username and password
@@ -49,7 +49,7 @@ server {
 
     server_name _;  # Replace with your domain if you have one
 
-    root /var/www/ba-dashboards;
+    root /root/gnopartners;
     index index.html;
 
     # Enable password protection for entire site
@@ -64,7 +64,7 @@ server {
 
     # Serve generated dashboards - no directory listing
     location /generated/ {
-        alias /var/www/ba-dashboards/generated/;
+        alias /root/gnopartners/generated/;
         try_files $uri =404;
         # Each dashboard accessible only via direct link
         # No directory browsing allowed for client privacy
@@ -72,7 +72,7 @@ server {
 
     # Serve assets (CSS, JS, images)
     location /assets/ {
-        alias /var/www/ba-dashboards/assets/;
+        alias /root/gnopartners/assets/;
         try_files $uri $uri/ =404;
         expires 7d;
         add_header Cache-Control "public, immutable";
@@ -113,7 +113,7 @@ fi
 
 # Create index page
 echo "9. Creating index page..."
-cat > /var/www/ba-dashboards/index.html << 'EOF'
+cat > /root/gnopartners/index.html << 'EOF'
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -229,8 +229,8 @@ echo "- No directory listing enabled (secure by design)"
 echo "- Share unique links with each client"
 echo ""
 echo "Next steps:"
-echo "1. Upload your dashboard files to: /var/www/ba-dashboards/generated/"
-echo "2. Upload your assets to: /var/www/ba-dashboards/assets/"
+echo "1. Upload your dashboard files to: /root/gnopartners/generated/"
+echo "2. Upload your assets to: /root/gnopartners/assets/"
 echo "3. Share dashboard URLs with clients:"
 echo "   Example: http://$SERVER_IP/generated/client-name-dashboard.html"
 echo ""
