@@ -1,194 +1,157 @@
-# BA Dashboards - Automated Business Analytics Dashboard Generator
+# BA Dashboards - Automated Hosting
 
-A powerful automation system that transforms Business Analysis summary documents (PDF/DOCX) into beautiful, interactive HTML dashboards with modern UI and visualizations.
+Host your BA dashboard HTML files with password protection and link-only access. **Push to GitHub and auto-deploy!**
 
-## Overview
+## How It Works
 
-This project automates the generation of professional Business Analytics dashboards from uploaded summary documents. It features a modern glassmorphism design, dark theme, interactive charts, and multi-page navigation.
+1. **Add HTML files** to `dashboards/` folder
+2. **Push to GitHub** (main branch)
+3. **GitHub Actions auto-deploys** to your server
+4. **Share links** with clients
 
-## Features
+That's it! No manual deployment needed.
 
-- **Automated Dashboard Generation**: Upload BA summary documents and automatically generate HTML dashboards
-- **Modern UI**: Glassmorphism design with dark theme and smooth animations
-- **Interactive Visualizations**: Chart.js powered graphs and data visualizations
-- **Multi-Page Navigation**: Executive Summary, Ad Stack, Market Deep-Dives, Financial Recovery, and Growth Roadmap
-- **Responsive Design**: Built with Tailwind CSS for optimal viewing on all devices
-- **Template-Based System**: Easily customizable templates for consistent branding
-- **Server-Ready**: Designed to be hosted on your server for client access
+## Quick Start
+
+### One-Time Setup (5 minutes)
+
+1. **Run server setup script**:
+   ```bash
+   scp deployment/server-setup.sh root@139.59.64.19:~/gnopartners/
+   ssh root@139.59.64.19
+   cd ~/gnopartners
+   ./server-setup.sh
+   ```
+
+2. **Setup GitHub Actions** - Follow [.github/SETUP.md](.github/SETUP.md)
+   - Generate SSH key
+   - Add to server
+   - Add 3 secrets to GitHub
+
+### Daily Workflow
+
+```bash
+# 1. Add your dashboard HTML
+dashboards/client-name-abc123.html
+
+# 2. Commit and push
+git add dashboards/
+git commit -m "Add client dashboard"
+git push
+
+# 3. Done! GitHub Actions deploys automatically
+# Check Actions tab on GitHub for deployment status
+```
 
 ## Project Structure
 
 ```
 GNOBADASHBOARDS/
-├── src/
-│   ├── assets/
-│   │   ├── css/              # Stylesheets
-│   │   │   └── dashboard.css
-│   │   ├── js/               # JavaScript modules
-│   │   │   ├── navigation.js
-│   │   │   └── charts.js
-│   │   └── images/           # Images, logos, icons
-│   ├── templates/            # HTML templates
-│   │   └── dashboard-template.html
-│   └── generator/            # Generation scripts
-│       ├── parser.js         # PDF/DOCX parser
-│       └── generator.js      # HTML generator
-├── uploads/                  # Uploaded BA summaries (PDF/DOCX)
-├── generated/                # Generated HTML dashboards
-├── docs/                     # Documentation
-├── config/                   # Configuration files
-│   └── template-config.json
-├── .gitignore
-├── package.json
-└── README.md
+├── dashboards/              # 👈 Put your HTML files here
+│   └── client-name.html
+├── assets/                  # CSS & JavaScript
+│   ├── css/
+│   └── js/
+├── .github/
+│   ├── workflows/
+│   │   └── deploy.yml      # 🤖 Auto-deployment workflow
+│   └── SETUP.md            # Setup instructions
+└── deployment/
+    ├── server-setup.sh     # Server setup (run once)
+    └── *.md                # Documentation
 ```
 
-## Technology Stack
+## Security Features
 
-- **Frontend**: HTML5, CSS3, JavaScript (Vanilla)
-- **Styling**: Tailwind CSS (CDN)
-- **Charts**: Chart.js
-- **Typography**: Google Fonts (Plus Jakarta Sans)
-- **Backend** (To be implemented): Node.js / Python
-- **Document Parsing** (To be implemented): pdf-parse, mammoth, or similar libraries
+- 🔒 **Password Protected**: HTTP Basic Auth on all dashboards
+- 🔗 **Link-Only Access**: No directory browsing enabled
+- 🚫 **Private**: Each client only sees their own dashboard
+- 🤖 **Secure Deployment**: SSH keys stored in GitHub Secrets
 
-## Getting Started
+## Access Model
 
-### Prerequisites
+```
+Client A: http://139.59.64.19/generated/acme-corp-k7f3m2.html
+Client B: http://139.59.64.19/generated/globex-p9x4n1.html
 
-- Node.js (v14 or higher) OR Python (v3.8 or higher)
-- npm or yarn (for Node.js)
-- Basic understanding of web development
-
-### Installation
-
-1. Clone the repository:
-   ```bash
-   git clone <repository-url>
-   cd GNOBADASHBOARDS
-   ```
-
-2. Install dependencies (once generator is implemented):
-   ```bash
-   npm install
-   # or
-   pip install -r requirements.txt
-   ```
-
-### Usage
-
-#### Viewing Existing Dashboards
-
-1. Navigate to the `generated/` folder
-2. Open any `.html` file in a web browser
-3. Example: `generated/supersonic-brands.html`
-
-#### Generating New Dashboards (To be implemented)
-
-1. Place your BA summary document (PDF or DOCX) in the `uploads/` folder
-2. Run the generator script:
-   ```bash
-   npm run generate <filename>
-   # or
-   python src/generator/generate.py <filename>
-   ```
-3. Find the generated HTML in the `generated/` folder
-
-## Template System
-
-The dashboard template (`src/templates/dashboard-template.html`) uses placeholder variables that are replaced during generation:
-
-### Key Placeholders
-
-- `{{COMPANY_NAME}}` - Client company name
-- `{{ANALYST_NAME}}` - Business analyst name
-- `{{ANNUAL_REVENUE}}` - Annual revenue figure
-- `{{METRIC_X_LABEL}}` - KPI metric labels
-- `{{METRIC_X_VALUE}}` - KPI metric values
-- `{{CHART_DATA_JSON}}` - Dynamic chart data (JSON)
-- `{{XXX_CONTENT}}` - Page-specific content sections
-
-## Customization
-
-### Styling
-
-Edit `src/assets/css/dashboard.css` to customize:
-- Colors and theme
-- Glass card effects
-- Animations
-- Typography
-
-### Charts
-
-Modify `src/assets/js/charts.js` to:
-- Change chart types
-- Update default data
-- Adjust chart styling
-
-### Navigation
-
-Update `src/assets/js/navigation.js` to:
-- Add/remove pages
-- Modify page labels
-- Change navigation behavior
-
-## Roadmap
-
-- [ ] Implement PDF parser for extracting data
-- [ ] Implement DOCX parser for extracting data
-- [ ] Build automated dashboard generator
-- [ ] Create web interface for uploading documents
-- [ ] Add authentication system
-- [ ] Implement server hosting setup
-- [ ] Add PDF export functionality
-- [ ] Create dashboard analytics tracking
-- [ ] Build client management system
-- [ ] Add multi-language support
-
-## Development
-
-### Adding a New Page
-
-1. Add navigation button in the template
-2. Create page content section with unique ID
-3. Add page label to `navigation.js`
-4. Style the page content
-
-### Creating Custom Sections
-
-Follow the existing pattern:
-```html
-<div id="custom-page" class="page-content">
-    <div class="glass-card p-10 rounded-3xl">
-        <!-- Your content here -->
-    </div>
-</div>
+✓ Client A can access their dashboard (with password)
+✗ Client A cannot browse /generated/
+✗ Client A cannot see Client B's dashboard
 ```
 
-## Sample Dashboards
+## Dashboard Naming
 
-- **Supersonic Brands**: `generated/supersonic-brands.html`
-  - E-commerce marketplace optimization
-  - PPC efficiency analysis
-  - Multi-market breakdown (USA, UK, Germany)
+Use unique names with random codes:
 
-## Contributing
+```
+✓ GOOD:
+client-name-abc123.html
+supersonic-brands-k7f3m2.html
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Submit a pull request
+✗ AVOID:
+client1.html          # Too predictable
+my dashboard.html     # Has spaces
+```
 
-## License
+## Documentation
 
-[Add your license here]
+- **[.github/SETUP.md](.github/SETUP.md)** - GitHub Actions setup (one-time)
+- **[deployment/WINDOWS-QUICKSTART.md](deployment/WINDOWS-QUICKSTART.md)** - Manual deployment (backup)
+- **[deployment/NAMING-GUIDE.md](deployment/NAMING-GUIDE.md)** - Dashboard naming tips
 
-## Support
+## GitHub Actions Workflow
 
-For issues, questions, or contributions, please contact the development team.
+The `.github/workflows/deploy.yml` automatically:
 
-## Acknowledgments
+1. ✅ Triggers on push to main branch
+2. ✅ Connects to server via SSH
+3. ✅ Deploys dashboards and assets
+4. ✅ Sets correct permissions
+5. ✅ Dashboards go live instantly
 
-- Built with modern web technologies
-- Designed for professional business analytics presentations
-- Optimized for client-facing deliverables
+**View deployment status**: Go to GitHub → Actions tab
+
+## Common Tasks
+
+### Add New Dashboard
+```bash
+# 1. Create HTML file
+dashboards/new-client-xyz789.html
+
+# 2. Push to GitHub
+git add dashboards/new-client-xyz789.html
+git commit -m "Add new client dashboard"
+git push
+
+# 3. GitHub Actions deploys automatically!
+# Share link: http://139.59.64.19/generated/new-client-xyz789.html
+```
+
+### Add New User (Password Access)
+```bash
+ssh root@139.59.64.19
+htpasswd /etc/nginx/auth/.htpasswd new-username
+```
+
+### View Deployment Logs
+Go to: `GitHub → Your Repo → Actions → Click on latest run`
+
+### View Server Logs
+```bash
+ssh root@139.59.64.19
+tail -f /var/log/nginx/ba-dashboards-access.log
+```
+
+## Manual Deployment (Backup)
+
+If GitHub Actions is down, deploy manually:
+
+```bash
+scp -r dashboards/* root@139.59.64.19:/var/www/ba-dashboards/generated/
+scp -r assets/* root@139.59.64.19:/var/www/ba-dashboards/assets/
+ssh root@139.59.64.19 "chown -R www-data:www-data /var/www/ba-dashboards"
+```
+
+---
+
+**Workflow: Add HTML → Push → Auto-Deploy → Share Link → Done!** 🚀

@@ -1,46 +1,19 @@
 {
   "name": "ba-dashboards",
   "version": "1.0.0",
-  "description": "Automated Business Analytics Dashboard Generator - Transform BA summaries into beautiful interactive dashboards",
-  "main": "src/generator/generator.js",
+  "description": "Simple BA Dashboard Hosting - Link-only access with password protection",
   "scripts": {
-    "start": "node src/generator/generator.js",
-    "generate": "node src/generator/generator.js",
-    "dev": "nodemon src/generator/generator.js",
-    "serve": "http-server generated/ -p 8080",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "deploy": "bash deployment/deploy.sh"
   },
   "keywords": [
     "business-analytics",
     "dashboard",
-    "automation",
-    "pdf-parser",
-    "html-generator",
-    "data-visualization"
+    "hosting"
   ],
-  "author": "Your Team",
+  "author": "GNO Partners",
   "license": "MIT",
-  "dependencies": {
-    "express": "^4.18.2",
-    "multer": "^1.4.5-lts.1",
-    "pdf-parse": "^1.1.1",
-    "mammoth": "^1.6.0",
-    "cheerio": "^1.0.0-rc.12",
-    "dotenv": "^16.3.1"
-  },
-  "devDependencies": {
-    "nodemon": "^3.0.1",
-    "http-server": "^14.1.1"
-  },
-  "engines": {
-    "node": ">=14.0.0"
-  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yourusername/ba-dashboards.git"
-  },
-  "bugs": {
-    "url": "https://github.com/yourusername/ba-dashboards/issues"
-  },
-  "homepage": "https://github.com/yourusername/ba-dashboards#readme"
+    "url": "git+https://github.com/niharagility21/GNOBADASHBOARDS.git"
+  }
 }

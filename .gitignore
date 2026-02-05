@@ -1,21 +1,6 @@
-# Node modules
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Environment variables
-.env
-.env.local
-.env.*.local
-
-# Generated files
-generated/*.html
-!generated/.gitkeep
-
-# Uploaded documents (optional - uncomment if you don't want to track uploads)
-# uploads/*
-# !uploads/.gitkeep
+# Dashboard HTML files (keep sample, ignore others)
+dashboards/*.html
+!dashboards/supersonic-brands.html
 
 # OS files
 .DS_Store
@@ -28,31 +13,11 @@ Thumbs.db
 *.swo
 *~
 
-# Logs
-logs/
-*.log
-
-# Build outputs
-dist/
-build/
-*.min.js
-*.min.css
-
 # Temporary files
 tmp/
 temp/
 *.tmp
+.deploy-temp/
 
-# Python (if using Python for generator)
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-.Python
-venv/
-env/
-*.egg-info/
-
-# Coverage
-coverage/
-.nyc_output/
+# Logs
+*.log
