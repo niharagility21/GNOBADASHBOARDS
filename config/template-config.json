@@ -1,0 +1,85 @@
+{
+  "templatePath": "src/templates/dashboard-template.html",
+  "outputPath": "generated/",
+  "uploadsPath": "uploads/",
+  "defaultValues": {
+    "COMPANY_NAME": "Company Name",
+    "COMPANY_NAME_UPPER": "COMPANY",
+    "COMPANY_SUFFIX": "BRANDS",
+    "ANALYST_NAME": "Analyst Name",
+    "ANNUAL_REVENUE": "$0",
+    "REPORT_DATE": "2024 Audit Data Output",
+    "AGENCY_SCORE": "2",
+    "AGENCY_COST": "$84,000"
+  },
+  "metrics": {
+    "metric1": {
+      "label": "METRIC_1_LABEL",
+      "value": "METRIC_1_VALUE",
+      "badge": "METRIC_1_BADGE"
+    },
+    "metric2": {
+      "label": "METRIC_2_LABEL",
+      "value": "METRIC_2_VALUE",
+      "suffix": "METRIC_2_SUFFIX",
+      "badge": "METRIC_2_BADGE"
+    },
+    "metric3": {
+      "label": "METRIC_3_LABEL",
+      "value": "METRIC_3_VALUE",
+      "badge": "METRIC_3_BADGE"
+    },
+    "metric4": {
+      "label": "METRIC_4_LABEL",
+      "value": "METRIC_4_VALUE",
+      "badge": "METRIC_4_BADGE"
+    }
+  },
+  "contentSections": [
+    "AD_STACK_CONTENT",
+    "USA_CONTENT",
+    "UK_CONTENT",
+    "GERMANY_CONTENT",
+    "FINANCIAL_CONTENT",
+    "ROADMAP_CONTENT"
+  ],
+  "chartData": {
+    "barChart": {
+      "labels": ["USA", "UK", "Germany"],
+      "datasets": [
+        {
+          "label": "PPC Reliance",
+          "data": [76, 62, 55],
+          "backgroundColor": "#3b82f6",
+          "borderRadius": 6
+        },
+        {
+          "label": "Spend Dilution",
+          "data": [89, 62, 68],
+          "backgroundColor": "#ef4444",
+          "borderRadius": 6
+        }
+      ]
+    },
+    "lineChart": {
+      "labels": ["Wk 1", "Wk 4", "Wk 8", "Wk 12"],
+      "datasets": [
+        {
+          "data": [24, 38, 55, 82],
+          "borderColor": "#10b981",
+          "borderWidth": 4,
+          "tension": 0.4,
+          "fill": true,
+          "backgroundColor": "rgba(16, 185, 129, 0.05)"
+        }
+      ]
+    }
+  },
+  "parserRules": {
+    "extractCompanyName": true,
+    "extractAnalystName": true,
+    "extractMetrics": true,
+    "extractFinancials": true,
+    "extractRecommendations": true
+  }
+}
