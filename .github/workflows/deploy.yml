@@ -1,0 +1,46 @@
+name: Deploy Dashboards
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'dashboards/**'
+      - 'assets/**'
+      - '.github/workflows/deploy.yml'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+
+      - name: Deploy dashboards to server
+        run: |
+          scp -i ~/.ssh/deploy_key -r dashboards/* ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/var/www/ba-dashboards/generated/
+
+      - name: Deploy assets to server
+        run: |
+          scp -i ~/.ssh/deploy_key -r assets/* ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/var/www/ba-dashboards/assets/
+
+      - name: Set permissions on server
+        run: |
+          ssh -i ~/.ssh/deploy_key ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} "chown -R www-data:www-data /var/www/ba-dashboards && chmod -R 755 /var/www/ba-dashboards"
+
+      - name: Cleanup
+        if: always()
+        run: rm -f ~/.ssh/deploy_key
+
+      - name: Deployment success
+        run: |
+          echo "✅ Deployment successful!"
+          echo "🔗 Dashboards are live at: http://${{ secrets.SERVER_IP }}/generated/"

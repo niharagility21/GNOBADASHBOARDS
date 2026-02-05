@@ -1,109 +1,80 @@
-# BA Dashboards - Simple Hosting
+# BA Dashboards - Automated Hosting
 
-Host your BA dashboard HTML files with password protection and link-only access.
+Host your BA dashboard HTML files with password protection and link-only access. **Push to GitHub and auto-deploy!**
 
-## What This Does
+## How It Works
 
-- ✅ Host HTML dashboards on your server
-- ✅ Password protected access
-- ✅ Link-only access (no directory browsing)
-- ✅ Each client gets their unique dashboard link
-- ✅ Perfect client confidentiality
+1. **Add HTML files** to `dashboards/` folder
+2. **Push to GitHub** (main branch)
+3. **GitHub Actions auto-deploys** to your server
+4. **Share links** with clients
+
+That's it! No manual deployment needed.
+
+## Quick Start
+
+### One-Time Setup (5 minutes)
+
+1. **Run server setup script**:
+   ```bash
+   scp deployment/server-setup.sh root@139.59.64.19:~/gnopartners/
+   ssh root@139.59.64.19
+   cd ~/gnopartners
+   ./server-setup.sh
+   ```
+
+2. **Setup GitHub Actions** - Follow [.github/SETUP.md](.github/SETUP.md)
+   - Generate SSH key
+   - Add to server
+   - Add 3 secrets to GitHub
+
+### Daily Workflow
+
+```bash
+# 1. Add your dashboard HTML
+dashboards/client-name-abc123.html
+
+# 2. Commit and push
+git add dashboards/
+git commit -m "Add client dashboard"
+git push
+
+# 3. Done! GitHub Actions deploys automatically
+# Check Actions tab on GitHub for deployment status
+```
 
 ## Project Structure
 
 ```
 GNOBADASHBOARDS/
-├── dashboards/          # Put your HTML dashboard files here
-│   └── supersonic-brands.html
-├── assets/              # CSS and JavaScript for dashboards
+├── dashboards/              # 👈 Put your HTML files here
+│   └── client-name.html
+├── assets/                  # CSS & JavaScript
 │   ├── css/
 │   └── js/
-└── deployment/          # Deployment scripts for server
-    ├── server-setup.sh
-    ├── deploy.sh
-    ├── WINDOWS-QUICKSTART.md
-    ├── DEPLOYMENT.md
-    └── NAMING-GUIDE.md
+├── .github/
+│   ├── workflows/
+│   │   └── deploy.yml      # 🤖 Auto-deployment workflow
+│   └── SETUP.md            # Setup instructions
+└── deployment/
+    ├── server-setup.sh     # Server setup (run once)
+    └── *.md                # Documentation
 ```
 
-## Quick Start
+## Security Features
 
-### 1. Add Your Dashboards
+- 🔒 **Password Protected**: HTTP Basic Auth on all dashboards
+- 🔗 **Link-Only Access**: No directory browsing enabled
+- 🚫 **Private**: Each client only sees their own dashboard
+- 🤖 **Secure Deployment**: SSH keys stored in GitHub Secrets
 
-Place your HTML dashboard files in the `dashboards/` folder:
-
-```
-dashboards/
-├── client-a-abc123.html
-├── client-b-xyz789.html
-└── supersonic-brands.html
-```
-
-### 2. Deploy to Server
-
-**Server**: `139.59.64.19`
-
-#### First Time Setup (run once)
-
-```bash
-# Upload setup script
-scp deployment/server-setup.sh root@139.59.64.19:~/gnopartners/
-
-# SSH and run
-ssh root@139.59.64.19
-cd ~/gnopartners
-chmod +x server-setup.sh
-./server-setup.sh
-```
-
-Creates username/password for access.
-
-#### Deploy Dashboards (every time you add new ones)
-
-From Windows PowerShell:
-
-```powershell
-# Deploy dashboards
-scp -r dashboards\* root@139.59.64.19:/var/www/ba-dashboards/generated/
-
-# Deploy assets
-scp -r assets\css\* root@139.59.64.19:/var/www/ba-dashboards/assets/css/
-scp -r assets\js\* root@139.59.64.19:/var/www/ba-dashboards/assets/js/
-```
-
-Fix permissions (in SSH):
-
-```bash
-ssh root@139.59.64.19
-chown -R www-data:www-data /var/www/ba-dashboards
-chmod -R 755 /var/www/ba-dashboards
-```
-
-### 3. Share Links with Clients
-
-Each client gets their unique URL:
-
-```
-http://139.59.64.19/generated/client-name-abc123.html
-```
-
-## How It Works
-
-### Security Model
-
-- 🔒 **Password Protected**: All access requires username/password
-- 🔗 **Link-Only**: Clients can ONLY access dashboards via direct link
-- 🚫 **No Browsing**: Directory listing disabled
-- 👤 **Private**: Each client only sees their own dashboard
-
-### Example
+## Access Model
 
 ```
 Client A: http://139.59.64.19/generated/acme-corp-k7f3m2.html
 Client B: http://139.59.64.19/generated/globex-p9x4n1.html
 
-✓ Client A can access their dashboard
+✓ Client A can access their dashboard (with password)
 ✗ Client A cannot browse /generated/
 ✗ Client A cannot see Client B's dashboard
 ```
@@ -122,33 +93,65 @@ client1.html          # Too predictable
 my dashboard.html     # Has spaces
 ```
 
-See [deployment/NAMING-GUIDE.md](deployment/NAMING-GUIDE.md) for details.
-
 ## Documentation
 
-- **[deployment/WINDOWS-QUICKSTART.md](deployment/WINDOWS-QUICKSTART.md)** - Windows step-by-step
-- **[deployment/DEPLOYMENT.md](deployment/DEPLOYMENT.md)** - Complete reference
-- **[deployment/NAMING-GUIDE.md](deployment/NAMING-GUIDE.md)** - Naming best practices
+- **[.github/SETUP.md](.github/SETUP.md)** - GitHub Actions setup (one-time)
+- **[deployment/WINDOWS-QUICKSTART.md](deployment/WINDOWS-QUICKSTART.md)** - Manual deployment (backup)
+- **[deployment/NAMING-GUIDE.md](deployment/NAMING-GUIDE.md)** - Dashboard naming tips
+
+## GitHub Actions Workflow
+
+The `.github/workflows/deploy.yml` automatically:
+
+1. ✅ Triggers on push to main branch
+2. ✅ Connects to server via SSH
+3. ✅ Deploys dashboards and assets
+4. ✅ Sets correct permissions
+5. ✅ Dashboards go live instantly
+
+**View deployment status**: Go to GitHub → Actions tab
 
 ## Common Tasks
 
 ### Add New Dashboard
-1. Place HTML in `dashboards/`
-2. Run deployment commands
-3. Share link with client
+```bash
+# 1. Create HTML file
+dashboards/new-client-xyz789.html
 
-### Add New User
+# 2. Push to GitHub
+git add dashboards/new-client-xyz789.html
+git commit -m "Add new client dashboard"
+git push
+
+# 3. GitHub Actions deploys automatically!
+# Share link: http://139.59.64.19/generated/new-client-xyz789.html
+```
+
+### Add New User (Password Access)
 ```bash
 ssh root@139.59.64.19
 htpasswd /etc/nginx/auth/.htpasswd new-username
 ```
 
-### View Logs
+### View Deployment Logs
+Go to: `GitHub → Your Repo → Actions → Click on latest run`
+
+### View Server Logs
 ```bash
 ssh root@139.59.64.19
 tail -f /var/log/nginx/ba-dashboards-access.log
 ```
 
+## Manual Deployment (Backup)
+
+If GitHub Actions is down, deploy manually:
+
+```bash
+scp -r dashboards/* root@139.59.64.19:/var/www/ba-dashboards/generated/
+scp -r assets/* root@139.59.64.19:/var/www/ba-dashboards/assets/
+ssh root@139.59.64.19 "chown -R www-data:www-data /var/www/ba-dashboards"
+```
+
 ---
 
-**Simple: Add HTML → Deploy → Share link → Done!** 🎉
+**Workflow: Add HTML → Push → Auto-Deploy → Share Link → Done!** 🚀
