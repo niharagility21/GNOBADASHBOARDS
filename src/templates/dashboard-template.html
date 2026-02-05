@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{COMPANY_NAME}} | Business Analytics Dashboard</title>
+
+    <!-- External Dependencies -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="../assets/css/dashboard.css">
+</head>
+<body class="flex min-h-screen">
+
+    <!-- Navigation Sidebar -->
+    <aside class="fixed left-0 top-0 h-screen w-72 bg-[#030712] border-r border-white/5 z-50 overflow-y-auto">
+        <div class="p-8">
+            <h1 class="text-xl font-extrabold tracking-tighter text-blue-500 italic">{{COMPANY_NAME_UPPER}} <span class="text-white">{{COMPANY_SUFFIX}}</span></h1>
+            <p class="text-[10px] uppercase tracking-widest text-slate-500 font-bold mt-1">Strategic Audit Report</p>
+        </div>
+
+        <nav class="px-4 space-y-1">
+            <button onclick="switchPage('summary', this)" class="sidebar-item active w-full flex items-center px-4 py-3 text-sm font-medium text-slate-400 rounded-lg hover:text-white transition-all">
+                <span class="mr-3">📊</span> Executive Summary
+            </button>
+            <button onclick="switchPage('adstack', this)" class="sidebar-item w-full flex items-center px-4 py-3 text-sm font-medium text-slate-400 rounded-lg hover:text-white transition-all">
+                <span class="mr-3">⚡</span> Ad Stack Efficiency
+            </button>
+            <button onclick="switchPage('usa', this)" class="sidebar-item w-full flex items-center px-4 py-3 text-sm font-medium text-slate-400 rounded-lg hover:text-white transition-all">
+                <span class="mr-3">🇺🇸</span> USA Deep-Dive
+            </button>
+            <button onclick="switchPage('uk', this)" class="sidebar-item w-full flex items-center px-4 py-3 text-sm font-medium text-slate-400 rounded-lg hover:text-white transition-all">
+                <span class="mr-3">🇬🇧</span> UK Deep-Dive
+            </button>
+            <button onclick="switchPage('germany', this)" class="sidebar-item w-full flex items-center px-4 py-3 text-sm font-medium text-slate-400 rounded-lg hover:text-white transition-all">
+                <span class="mr-3">🇩🇪</span> Germany Deep-Dive
+            </button>
+            <button onclick="switchPage('financial', this)" class="sidebar-item w-full flex items-center px-4 py-3 text-sm font-medium text-slate-400 rounded-lg hover:text-white transition-all">
+                <span class="mr-3">💰</span> Financial Recovery
+            </button>
+            <button onclick="switchPage('roadmap', this)" class="sidebar-item w-full flex items-center px-4 py-3 text-sm font-medium text-slate-400 rounded-lg hover:text-white transition-all">
+                <span class="mr-3">🚀</span> Growth Roadmap
+            </button>
+        </nav>
+
+        <div class="absolute bottom-8 px-6 w-full">
+            <div class="glass-card p-4 rounded-xl border-red-500/20">
+                <p class="text-[10px] text-slate-500 uppercase font-bold">Agency Performance</p>
+                <p class="text-xl font-black text-red-500">{{AGENCY_SCORE}} / 10</p>
+                <p class="text-[10px] text-slate-400 mt-1">Annual Cost: {{AGENCY_COST}}</p>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="ml-72 p-12 w-full">
+
+        <!-- Header -->
+        <header class="flex justify-between items-end mb-12 border-b border-white/5 pb-8">
+            <div>
+                <h2 id="page-title" class="text-4xl font-black text-white tracking-tight">Executive Summary</h2>
+                <p class="text-slate-400 mt-2">Analysis for <strong>{{ANALYST_NAME}}</strong> | Annually: <strong>{{ANNUAL_REVENUE}}</strong></p>
+            </div>
+            <div class="text-right">
+                <p class="text-[10px] font-bold text-blue-500 uppercase tracking-[0.3em]">Report Timestamp</p>
+                <p class="text-xs text-slate-400 font-mono uppercase">{{REPORT_DATE}}</p>
+            </div>
+        </header>
+
+        <!-- PAGE: EXECUTIVE SUMMARY -->
+        <div id="summary" class="page-content active">
+            <div class="grid grid-cols-4 gap-6 mb-12">
+                <div class="glass-card p-6 rounded-2xl">
+                    <p class="text-xs font-bold text-slate-500 uppercase mb-2">{{METRIC_1_LABEL}}</p>
+                    <p class="text-4xl font-black">{{METRIC_1_VALUE}}</p>
+                    <div class="mt-4 flex gap-2"><span class="finding-badge">{{METRIC_1_BADGE}}</span></div>
+                </div>
+                <div class="glass-card p-6 rounded-2xl border-l-4 border-red-500">
+                    <p class="text-xs font-bold text-slate-500 uppercase mb-2">{{METRIC_2_LABEL}}</p>
+                    <p class="text-4xl font-black">{{METRIC_2_VALUE}} <span class="text-xs text-slate-500">{{METRIC_2_SUFFIX}}</span></p>
+                    <div class="mt-4 flex gap-2"><span class="finding-badge text-red-400">{{METRIC_2_BADGE}}</span></div>
+                </div>
+                <div class="glass-card p-6 rounded-2xl border-l-4 border-emerald-500">
+                    <p class="text-xs font-bold text-slate-500 uppercase mb-2">{{METRIC_3_LABEL}}</p>
+                    <p class="text-4xl font-black">{{METRIC_3_VALUE}}</p>
+                    <div class="mt-4 flex gap-2"><span class="finding-badge text-emerald-400">{{METRIC_3_BADGE}}</span></div>
+                </div>
+                <div class="glass-card p-6 rounded-2xl">
+                    <p class="text-xs font-bold text-slate-500 uppercase mb-2">{{METRIC_4_LABEL}}</p>
+                    <p class="text-4xl font-black">{{METRIC_4_VALUE}}</p>
+                    <div class="mt-4 flex gap-2"><span class="finding-badge">{{METRIC_4_BADGE}}</span></div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-8">
+                <div class="glass-card p-8 rounded-3xl">
+                    <h3 class="font-bold text-lg mb-6 flex items-center gap-3">
+                        <span class="w-1.5 h-6 bg-blue-500 rounded-full"></span> Ad Stack Efficiency vs Dilution
+                    </h3>
+                    <div class="h-64"><canvas id="barChart"></canvas></div>
+                </div>
+                <div class="glass-card p-8 rounded-3xl">
+                    <h3 class="font-bold text-lg mb-6 flex items-center gap-3">
+                        <span class="w-1.5 h-6 bg-emerald-500 rounded-full"></span> Organic Potential Projection
+                    </h3>
+                    <div class="h-64"><canvas id="lineChart"></canvas></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PAGE: AD STACK -->
+        <div id="adstack" class="page-content">
+            {{AD_STACK_CONTENT}}
+        </div>
+
+        <!-- PAGE: USA -->
+        <div id="usa" class="page-content">
+            {{USA_CONTENT}}
+        </div>
+
+        <!-- PAGE: UK -->
+        <div id="uk" class="page-content">
+            {{UK_CONTENT}}
+        </div>
+
+        <!-- PAGE: GERMANY -->
+        <div id="germany" class="page-content">
+            {{GERMANY_CONTENT}}
+        </div>
+
+        <!-- PAGE: FINANCIAL -->
+        <div id="financial" class="page-content">
+            {{FINANCIAL_CONTENT}}
+        </div>
+
+        <!-- PAGE: ROADMAP -->
+        <div id="roadmap" class="page-content">
+            {{ROADMAP_CONTENT}}
+        </div>
+
+    </main>
+
+    <!-- External Scripts -->
+    <script src="../assets/js/navigation.js"></script>
+    <script src="../assets/js/charts.js"></script>
+
+    <!-- Dynamic Chart Data -->
+    <script>
+        // Override default chart data with generated data
+        window.addEventListener('DOMContentLoaded', () => {
+            const chartData = {{CHART_DATA_JSON}};
+            if (chartData) {
+                initializeCharts(chartData);
+            }
+        });
+    </script>
+</body>
+</html>
