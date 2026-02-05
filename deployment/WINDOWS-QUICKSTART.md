@@ -118,9 +118,16 @@ chmod -R 755 /var/www/ba-dashboards
 
 ### View Your Dashboards:
 
-- **Main page**: http://139.59.64.19
-- **All dashboards**: http://139.59.64.19/generated/
-- **Specific dashboard**: http://139.59.64.19/generated/supersonic-brands.html
+**Important:** Dashboards are accessible ONLY via direct link (no browsing).
+
+- **Main page**: http://139.59.64.19 (landing page only)
+- **Direct dashboard link**: http://139.59.64.19/generated/supersonic-brands.html
+- **Each client gets their unique URL** - share links directly with clients
+
+**Why link-only access?**
+- Client privacy and confidentiality
+- Each client can only access their own dashboard
+- More secure - can't browse to see other dashboards
 
 ---
 
@@ -161,7 +168,27 @@ Whenever you generate new dashboards:
 
 1. Place them in the `generated/` folder
 2. Run the deployment commands from Step 4 again
-3. Refresh your browser
+3. Share the unique URL with your client
+
+### Dashboard Naming Tips
+
+Use descriptive names with random codes:
+
+**Good:**
+```
+supersonic-brands-k7f3m2.html
+acme-corp-abc123.html
+```
+
+**Avoid:**
+```
+client1.html          # Too simple
+my dashboard.html     # Has spaces
+```
+
+This makes your dashboards more secure and organized!
+
+See [NAMING-GUIDE.md](NAMING-GUIDE.md) for detailed guidelines.
 
 ---
 

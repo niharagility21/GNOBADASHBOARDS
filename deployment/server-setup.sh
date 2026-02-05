@@ -59,15 +59,15 @@ server {
     # Main location
     location / {
         try_files $uri $uri/ =404;
-        autoindex on;  # Enable directory listing
-        autoindex_exact_size off;
-        autoindex_localtime on;
+        # Directory listing disabled - dashboards accessible by direct link only
     }
 
-    # Serve generated dashboards
+    # Serve generated dashboards - no directory listing
     location /generated/ {
         alias /var/www/ba-dashboards/generated/;
-        try_files $uri $uri/ =404;
+        try_files $uri =404;
+        # Each dashboard accessible only via direct link
+        # No directory browsing allowed for client privacy
     }
 
     # Serve assets (CSS, JS, images)
@@ -188,14 +188,21 @@ cat > /var/www/ba-dashboards/index.html << 'EOF'
         <p class="subtitle">Business Analytics & Strategic Reports</p>
 
         <div class="status">
-            <p><strong>✓ Server Online</strong> - All dashboards are accessible below</p>
+            <p><strong>✓ Server Online</strong> - Dashboards are accessible via direct link</p>
         </div>
 
         <div class="dashboards">
-            <h3 style="margin-bottom: 15px; color: #333;">Available Dashboards:</h3>
-            <a href="/generated/" class="dashboard-link">
-                📁 View All Dashboards
-            </a>
+            <h3 style="margin-bottom: 15px; color: #333;">Access Information:</h3>
+            <div style="background: #f9fafb; border-radius: 12px; padding: 25px; margin-top: 20px;">
+                <p style="color: #374151; line-height: 1.8; margin-bottom: 15px;">
+                    Each dashboard is accessible through its unique URL. Your dashboard link has been
+                    provided to you separately.
+                </p>
+                <p style="color: #6b7280; font-size: 0.9em; line-height: 1.6;">
+                    <strong>Example format:</strong><br>
+                    http://139.59.64.19/generated/your-dashboard-name.html
+                </p>
+            </div>
         </div>
     </div>
 </body>
@@ -216,12 +223,21 @@ echo "Access URL: http://$SERVER_IP"
 echo "Username: $USERNAME"
 echo "Password: (the password you just set)"
 echo ""
+echo "Dashboard Access:"
+echo "- Dashboards are accessible ONLY via direct link"
+echo "- No directory listing enabled (secure by design)"
+echo "- Share unique links with each client"
+echo ""
 echo "Next steps:"
 echo "1. Upload your dashboard files to: /var/www/ba-dashboards/generated/"
 echo "2. Upload your assets to: /var/www/ba-dashboards/assets/"
-echo "3. Access your dashboards at: http://$SERVER_IP/generated/"
+echo "3. Share dashboard URLs with clients:"
+echo "   Example: http://$SERVER_IP/generated/client-name-dashboard.html"
 echo ""
 echo "To add more users, run:"
 echo "htpasswd /etc/nginx/auth/.htpasswd <new-username>"
+echo ""
+echo "TIP: Use unique, hard-to-guess filenames for additional security"
+echo "Example: supersonic-brands-a7f3k2.html instead of supersonic-brands.html"
 echo ""
 echo "=========================================="

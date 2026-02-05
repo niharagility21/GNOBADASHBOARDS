@@ -133,10 +133,67 @@ You'll be prompted for credentials:
 
 ### View Dashboards
 
-Once logged in, you can:
-- See the main index page at: `http://139.59.64.19`
-- Browse all dashboards at: `http://139.59.64.19/generated/`
-- Access specific dashboard: `http://139.59.64.19/generated/supersonic-brands.html`
+**Important: Dashboards are accessible ONLY via direct link - no directory browsing allowed.**
+
+Once logged in:
+- Main landing page: `http://139.59.64.19` (shows server status only)
+- Each dashboard accessible via unique URL:
+  - Example: `http://139.59.64.19/generated/supersonic-brands.html`
+  - Example: `http://139.59.64.19/generated/client-name-abc123.html`
+
+**For client privacy:**
+- Directory listing is disabled
+- Each client gets their unique dashboard link
+- Clients cannot see other dashboards
+- Links must be shared directly with clients
+
+---
+
+## Dashboard Naming & Link Management
+
+### Important: Link-Only Access
+
+Your dashboards are configured for **link-only access**:
+- ✓ No directory listing or browsing
+- ✓ Each dashboard accessible only via its unique URL
+- ✓ Perfect for client confidentiality
+- ✓ Each client gets their own secure link
+
+### Recommended Naming Convention
+
+Use descriptive names with random codes for security:
+
+**Good examples:**
+```
+supersonic-brands-k7f3m2.html
+acme-corp-p9x4n1.html
+client-report-2024-h8j2k5.html
+```
+
+**Avoid:**
+```
+client1.html          # Too predictable
+dashboard.html        # Not unique
+test dashboard.html   # Has spaces
+```
+
+### Sharing Dashboard Links
+
+When sharing with clients:
+
+1. **Email Template:**
+   ```
+   Your dashboard: http://139.59.64.19/generated/your-dashboard-abc123.html
+   Username: [username]
+   Password: [password]
+
+   Keep this link confidential.
+   ```
+
+2. **Keep a Private Registry:**
+   Track which dashboard belongs to which client in a spreadsheet
+
+For detailed naming guidelines, see: [NAMING-GUIDE.md](NAMING-GUIDE.md)
 
 ---
 
@@ -359,6 +416,8 @@ For issues or questions:
 | Add user | `ssh root@139.59.64.19 'htpasswd /etc/nginx/auth/.htpasswd username'` |
 | Restart Nginx | `ssh root@139.59.64.19 'systemctl restart nginx'` |
 | Update server | `ssh root@139.59.64.19 'apt-get update && apt-get upgrade'` |
+| Rename dashboard | `ssh root@139.59.64.19 'cd /var/www/ba-dashboards/generated && mv old.html new.html'` |
+| List deployed dashboards | `ssh root@139.59.64.19 'ls -lh /var/www/ba-dashboards/generated/'` |
 
 ---
 

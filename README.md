@@ -15,6 +15,9 @@ This project automates the generation of professional Business Analytics dashboa
 - **Responsive Design**: Built with Tailwind CSS for optimal viewing on all devices
 - **Template-Based System**: Easily customizable templates for consistent branding
 - **Server-Ready**: Designed to be hosted on your server for client access
+- **Link-Only Access**: Dashboards accessible only via direct URLs - no directory browsing for client privacy
+- **Password Protected**: HTTP Basic Auth for secure access
+- **Client Confidentiality**: Each client gets their unique link, cannot see other dashboards
 
 ## Project Structure
 
@@ -93,6 +96,49 @@ GNOBADASHBOARDS/
    python src/generator/generate.py <filename>
    ```
 3. Find the generated HTML in the `generated/` folder
+
+## Server Deployment
+
+Deploy your dashboards to a production server with password protection and secure access.
+
+### Quick Start (Windows Users)
+
+See the complete step-by-step guide: **[WINDOWS-QUICKSTART.md](deployment/WINDOWS-QUICKSTART.md)**
+
+### Deployment Features
+
+- ✓ Automated Nginx setup with one script
+- ✓ Password protection (HTTP Basic Auth)
+- ✓ Link-only access - no directory browsing
+- ✓ Client confidentiality - each gets unique URL
+- ✓ Easy file deployment via SCP or WinSCP
+
+### Deployment Guides
+
+- **[deployment/WINDOWS-QUICKSTART.md](deployment/WINDOWS-QUICKSTART.md)** - Simple guide for Windows users
+- **[deployment/DEPLOYMENT.md](deployment/DEPLOYMENT.md)** - Complete deployment reference
+- **[deployment/NAMING-GUIDE.md](deployment/NAMING-GUIDE.md)** - Dashboard naming best practices
+
+### Quick Deploy Commands
+
+```bash
+# 1. Setup server (run once)
+ssh root@your-server-ip
+./server-setup.sh
+
+# 2. Deploy dashboards (run whenever you have new dashboards)
+scp -r generated/* root@your-server-ip:/var/www/ba-dashboards/generated/
+scp -r src/assets/* root@your-server-ip:/var/www/ba-dashboards/assets/
+```
+
+### Access Model
+
+**Important:** Dashboards use link-only access:
+- No directory listing or browsing
+- Each client receives their unique dashboard URL
+- Example: `http://your-server-ip/generated/client-name-abc123.html`
+- Clients cannot see or access other dashboards
+- Perfect for confidential client reports
 
 ## Template System
 
