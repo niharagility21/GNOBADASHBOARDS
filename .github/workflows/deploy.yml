@@ -6,8 +6,6 @@ on:
       - main
     paths:
       - 'dashboards/**'
-      - 'assets/**'
-      - '.github/workflows/deploy.yml'
 
 jobs:
   deploy:
@@ -17,51 +15,45 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup SSH
+      - name: Install sshpass
         run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
-          chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+          sudo apt-get update
+          sudo apt-get install -y sshpass
 
       - name: Deploy dashboards to server
-        id: deploy-dashboards
         run: |
-          scp -i ~/.ssh/deploy_key -r dashboards/* ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/root/gnopartners/generated/
-          echo "✅ Dashboards deployed"
+          # Get list of HTML files to deploy
+          for file in dashboards/*.html; do
+            if [ -f "$file" ]; then
+              filename=$(basename "$file")
+              echo "Deploying $filename..."
 
-      - name: Deploy assets to server
-        id: deploy-assets
+              # Deploy to server
+              sshpass -p 'TN@qwe4321n' scp -o StrictHostKeyChecking=no "$file" root@139.59.64.19:/root/gnopartners/generated/
+
+              # Rename file on server by adding 'done' suffix
+              name="${filename%.html}"
+              sshpass -p 'TN@qwe4321n' ssh -o StrictHostKeyChecking=no root@139.59.64.19 \
+                "cd /root/gnopartners/generated && mv '$filename' '${name}done.html'"
+
+              echo "✅ Deployed and renamed: ${name}done.html"
+            fi
+          done
+
+      - name: Get live URLs
+        id: get-urls
         run: |
-          scp -i ~/.ssh/deploy_key -r assets/* ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/root/gnopartners/assets/
-          echo "✅ Assets deployed"
-
-      - name: Set permissions on server
-        id: set-permissions
-        run: |
-          ssh -i ~/.ssh/deploy_key ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} "chown -R www-data:www-data /root/gnopartners && chmod -R 755 /root/gnopartners"
-          echo "✅ Permissions set"
-
-      - name: Get deployed dashboard count
-        id: dashboard-count
-        run: |
-          COUNT=$(find dashboards -name "*.html" | wc -l)
-          echo "count=$COUNT" >> $GITHUB_OUTPUT
-          echo "📊 Deployed $COUNT dashboard(s)"
-
-      - name: Cleanup SSH key
-        if: always()
-        run: rm -f ~/.ssh/deploy_key
-
-      - name: Create hosted marker
-        if: success()
-        run: |
-          echo "✅ Deployed at $(date)" > .hosted
-          git config user.name "GitHub Actions"
-          git config user.email "actions@github.com"
-          git add .hosted
-          git commit -m "Mark dashboards as hosted [skip ci]" || echo "No changes to commit"
-          git push || echo "Push failed, continuing..."
+          URLS=""
+          for file in dashboards/*.html; do
+            if [ -f "$file" ]; then
+              filename=$(basename "$file")
+              name="${filename%.html}"
+              URLS="${URLS}http://139.59.64.19/generated/${name}done.html\n"
+            fi
+          done
+          echo "urls<<EOF" >> $GITHUB_OUTPUT
+          echo -e "$URLS" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Send success email
         if: success()
@@ -71,21 +63,20 @@ jobs:
           server_port: 587
           username: agilitytechai@gmail.com
           password: "wfkp ggxu vyvg donh"
-          subject: "✅ Dashboard Deployment Successful"
-          to: ansh.t@agilitytech.ai,preet.d@agilitytech.ai,nihar.t@agilitytech.ai
+          subject: "✅ Dashboard Deployed Successfully"
+          to: iampreetdave@gmail.com,anshthakkar4904@gmail.com
           from: GNO BA Dashboards <agilitytechai@gmail.com>
           body: |
             Dashboard deployment completed successfully!
 
+            🔗 Live Website URLs:
+            ${{ steps.get-urls.outputs.urls }}
+
             📊 Deployment Details:
-            - Dashboards deployed: ${{ steps.dashboard-count.outputs.count }}
-            - Server: http://${{ secrets.SERVER_IP }}
+            - Server: http://139.59.64.19
             - Commit: ${{ github.sha }}
             - Branch: ${{ github.ref_name }}
-            - Triggered by: ${{ github.actor }}
-
-            🔗 View dashboards at:
-            http://${{ secrets.SERVER_IP }}/generated/
+            - Time: ${{ github.event.head_commit.timestamp }}
 
             ✅ All dashboards are now live!
 
@@ -101,29 +92,18 @@ jobs:
           username: agilitytechai@gmail.com
           password: "wfkp ggxu vyvg donh"
           subject: "❌ Dashboard Deployment Failed"
-          to: ansh.t@agilitytech.ai,preet.d@agilitytech.ai,nihar.t@agilitytech.ai
+          to: iampreetdave@gmail.com,anshthakkar4904@gmail.com
           from: GNO BA Dashboards <agilitytechai@gmail.com>
           body: |
             Dashboard deployment failed!
 
             ❌ Deployment Details:
-            - Server: ${{ secrets.SERVER_IP }}
+            - Server: 139.59.64.19
             - Commit: ${{ github.sha }}
             - Branch: ${{ github.ref_name }}
-            - Triggered by: ${{ github.actor }}
 
             🔍 Check the workflow run for details:
             https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
-            Please review the error logs and try again.
-
             ---
             GitHub Actions - GNO BA Dashboards
-
-      - name: Deployment summary
-        if: success()
-        run: |
-          echo "✅ Deployment successful!"
-          echo "📊 Dashboards deployed: ${{ steps.dashboard-count.outputs.count }}"
-          echo "🔗 Live at: http://${{ secrets.SERVER_IP }}/generated/"
-          echo "📧 Email notification sent!"
