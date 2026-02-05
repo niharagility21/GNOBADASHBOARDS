@@ -21,12 +21,50 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y sshpass
 
-      - name: Setup server directories
+      - name: Setup server directories and remove auth
         run: |
-          echo "Creating directories on server..."
-          sshpass -p 'TN@qwe4321n' ssh -o StrictHostKeyChecking=no -o ConnectTimeout=30 root@139.59.64.19 \
-            "mkdir -p /root/gnopartners/generated && chmod -R 755 /root/gnopartners"
-          echo "✅ Directories created"
+          echo "Setting up server..."
+          sshpass -p 'TN@qwe4321n' ssh -o StrictHostKeyChecking=no -o ConnectTimeout=30 root@139.59.64.19 << 'ENDSSH'
+
+          # Create directories
+          mkdir -p /root/gnopartners/generated
+          chmod -R 755 /root/gnopartners
+
+          # Update Nginx config to remove authentication for /generated/
+          cat > /etc/nginx/sites-available/ba-dashboards <<'EOF'
+          server {
+              listen 80;
+              server_name _;
+
+              root /root/gnopartners;
+              index index.html;
+
+              # Disable directory listing
+              autoindex off;
+
+              location /generated/ {
+                  # No authentication required - public access
+                  alias /root/gnopartners/generated/;
+                  try_files $uri $uri/ =404;
+              }
+
+              location /assets/ {
+                  alias /root/gnopartners/assets/;
+                  try_files $uri $uri/ =404;
+              }
+
+              location / {
+                  try_files $uri $uri/ =404;
+              }
+          }
+          EOF
+
+          # Enable site and reload Nginx
+          ln -sf /etc/nginx/sites-available/ba-dashboards /etc/nginx/sites-enabled/
+          nginx -t && systemctl reload nginx
+
+          echo "✅ Server configured - public access enabled"
+          ENDSSH
 
       - name: Deploy dashboards to server
         run: |
@@ -103,38 +141,60 @@ jobs:
         run: |
           URLS="${{ steps.get-urls.outputs.urls }}"
 
-          # Send email using curl
-          curl -s --url 'smtps://smtp.gmail.com:465' \
-            --ssl-reqd \
-            --mail-from 'agilitytechai@gmail.com' \
-            --mail-rcpt 'iampreetdave@gmail.com' \
-            --mail-rcpt 'anshthakkar4904@gmail.com' \
-            --user 'agilitytechai@gmail.com:wfkp ggxu vyvg donh' \
-            -T - <<EOF
-          From: GNO BA Dashboards <agilitytechai@gmail.com>
-          To: iampreetdave@gmail.com,anshthakkar4904@gmail.com
-          Subject: ✅ Dashboard Deployed Successfully
+          # Install Python email dependencies
+          python3 -m pip install --quiet --upgrade pip
 
-          Dashboard deployment completed successfully!
+          # Send email using Python
+          python3 << 'PYEOF'
+          import smtplib
+          from email.mime.text import MIMEText
+          from email.mime.multipart import MIMEMultipart
+          import os
 
-          🔗 Live Website URLs:
-          $URLS
+          # Email configuration
+          sender_email = "agilitytechai@gmail.com"
+          sender_password = "wfkp ggxu vyvg donh"
+          recipients = ["iampreetdave@gmail.com", "anshthakkar4904@gmail.com"]
 
-          📊 Deployment Details:
-          - Server: http://139.59.64.19
-          - Commit: ${{ github.sha }}
-          - Branch: ${{ github.ref_name }}
+          urls = """${{ steps.get-urls.outputs.urls }}"""
 
-          ✅ All dashboards are now live!
+          # Create message
+          msg = MIMEMultipart()
+          msg['From'] = f"GNO BA Dashboards <{sender_email}>"
+          msg['To'] = ", ".join(recipients)
+          msg['Subject'] = "✅ Dashboard Deployed Successfully"
 
-          ---
-          GitHub Actions - GNO BA Dashboards
-          EOF
+          body = f"""Dashboard deployment completed successfully!
 
-          echo "✅ Email sent (or skipped if failed)"
+🔗 Live Website URLs:
+{urls}
+
+📊 Deployment Details:
+- Server: http://139.59.64.19
+- Commit: ${{ github.sha }}
+- Branch: ${{ github.ref_name }}
+
+✅ All dashboards are now live and publicly accessible!
+
+---
+GitHub Actions - GNO BA Dashboards"""
+
+          msg.attach(MIMEText(body, 'plain'))
+
+          # Send email
+          try:
+              server = smtplib.SMTP('smtp.gmail.com', 587)
+              server.starttls()
+              server.login(sender_email, sender_password)
+              server.send_message(msg)
+              server.quit()
+              print("✅ Email sent successfully!")
+          except Exception as e:
+              print(f"⚠️ Email failed: {e}")
+          PYEOF
 
       - name: Deployment complete
         run: |
           echo "✅ Deployment successful!"
-          echo "🔗 Live URLs:"
+          echo "🔗 Live URLs (public access, no password required):"
           echo "${{ steps.get-urls.outputs.urls }}"
