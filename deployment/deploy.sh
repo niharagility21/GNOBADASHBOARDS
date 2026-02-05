@@ -39,10 +39,10 @@ mkdir -p .deploy-temp/assets/images
 
 # Copy files to deployment package
 echo "Copying files..."
-cp -r generated/* .deploy-temp/generated/ 2>/dev/null || true
-cp -r src/assets/css/* .deploy-temp/assets/css/ 2>/dev/null || true
-cp -r src/assets/js/* .deploy-temp/assets/js/ 2>/dev/null || true
-cp -r src/assets/images/* .deploy-temp/assets/images/ 2>/dev/null || true
+cp -r dashboards/* .deploy-temp/generated/ 2>/dev/null || true
+cp -r assets/css/* .deploy-temp/assets/css/ 2>/dev/null || true
+cp -r assets/js/* .deploy-temp/assets/js/ 2>/dev/null || true
+cp -r assets/images/* .deploy-temp/assets/images/ 2>/dev/null || true
 
 # Count files
 DASHBOARD_COUNT=$(find .deploy-temp/generated -name "*.html" 2>/dev/null | wc -l)

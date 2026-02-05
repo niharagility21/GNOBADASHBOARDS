@@ -1,240 +1,154 @@
-# BA Dashboards - Automated Business Analytics Dashboard Generator
+# BA Dashboards - Simple Hosting
 
-A powerful automation system that transforms Business Analysis summary documents (PDF/DOCX) into beautiful, interactive HTML dashboards with modern UI and visualizations.
+Host your BA dashboard HTML files with password protection and link-only access.
 
-## Overview
+## What This Does
 
-This project automates the generation of professional Business Analytics dashboards from uploaded summary documents. It features a modern glassmorphism design, dark theme, interactive charts, and multi-page navigation.
-
-## Features
-
-- **Automated Dashboard Generation**: Upload BA summary documents and automatically generate HTML dashboards
-- **Modern UI**: Glassmorphism design with dark theme and smooth animations
-- **Interactive Visualizations**: Chart.js powered graphs and data visualizations
-- **Multi-Page Navigation**: Executive Summary, Ad Stack, Market Deep-Dives, Financial Recovery, and Growth Roadmap
-- **Responsive Design**: Built with Tailwind CSS for optimal viewing on all devices
-- **Template-Based System**: Easily customizable templates for consistent branding
-- **Server-Ready**: Designed to be hosted on your server for client access
-- **Link-Only Access**: Dashboards accessible only via direct URLs - no directory browsing for client privacy
-- **Password Protected**: HTTP Basic Auth for secure access
-- **Client Confidentiality**: Each client gets their unique link, cannot see other dashboards
+- ✅ Host HTML dashboards on your server
+- ✅ Password protected access
+- ✅ Link-only access (no directory browsing)
+- ✅ Each client gets their unique dashboard link
+- ✅ Perfect client confidentiality
 
 ## Project Structure
 
 ```
 GNOBADASHBOARDS/
-├── src/
-│   ├── assets/
-│   │   ├── css/              # Stylesheets
-│   │   │   └── dashboard.css
-│   │   ├── js/               # JavaScript modules
-│   │   │   ├── navigation.js
-│   │   │   └── charts.js
-│   │   └── images/           # Images, logos, icons
-│   ├── templates/            # HTML templates
-│   │   └── dashboard-template.html
-│   └── generator/            # Generation scripts
-│       ├── parser.js         # PDF/DOCX parser
-│       └── generator.js      # HTML generator
-├── uploads/                  # Uploaded BA summaries (PDF/DOCX)
-├── generated/                # Generated HTML dashboards
-├── docs/                     # Documentation
-├── config/                   # Configuration files
-│   └── template-config.json
-├── .gitignore
-├── package.json
-└── README.md
+├── dashboards/          # Put your HTML dashboard files here
+│   └── supersonic-brands.html
+├── assets/              # CSS and JavaScript for dashboards
+│   ├── css/
+│   └── js/
+└── deployment/          # Deployment scripts for server
+    ├── server-setup.sh
+    ├── deploy.sh
+    ├── WINDOWS-QUICKSTART.md
+    ├── DEPLOYMENT.md
+    └── NAMING-GUIDE.md
 ```
 
-## Technology Stack
+## Quick Start
 
-- **Frontend**: HTML5, CSS3, JavaScript (Vanilla)
-- **Styling**: Tailwind CSS (CDN)
-- **Charts**: Chart.js
-- **Typography**: Google Fonts (Plus Jakarta Sans)
-- **Backend** (To be implemented): Node.js / Python
-- **Document Parsing** (To be implemented): pdf-parse, mammoth, or similar libraries
+### 1. Add Your Dashboards
 
-## Getting Started
+Place your HTML dashboard files in the `dashboards/` folder:
 
-### Prerequisites
+```
+dashboards/
+├── client-a-abc123.html
+├── client-b-xyz789.html
+└── supersonic-brands.html
+```
 
-- Node.js (v14 or higher) OR Python (v3.8 or higher)
-- npm or yarn (for Node.js)
-- Basic understanding of web development
+### 2. Deploy to Server
 
-### Installation
+**Server**: `139.59.64.19`
 
-1. Clone the repository:
-   ```bash
-   git clone <repository-url>
-   cd GNOBADASHBOARDS
-   ```
-
-2. Install dependencies (once generator is implemented):
-   ```bash
-   npm install
-   # or
-   pip install -r requirements.txt
-   ```
-
-### Usage
-
-#### Viewing Existing Dashboards
-
-1. Navigate to the `generated/` folder
-2. Open any `.html` file in a web browser
-3. Example: `generated/supersonic-brands.html`
-
-#### Generating New Dashboards (To be implemented)
-
-1. Place your BA summary document (PDF or DOCX) in the `uploads/` folder
-2. Run the generator script:
-   ```bash
-   npm run generate <filename>
-   # or
-   python src/generator/generate.py <filename>
-   ```
-3. Find the generated HTML in the `generated/` folder
-
-## Server Deployment
-
-Deploy your dashboards to a production server with password protection and secure access.
-
-### Quick Start (Windows Users)
-
-See the complete step-by-step guide: **[WINDOWS-QUICKSTART.md](deployment/WINDOWS-QUICKSTART.md)**
-
-### Deployment Features
-
-- ✓ Automated Nginx setup with one script
-- ✓ Password protection (HTTP Basic Auth)
-- ✓ Link-only access - no directory browsing
-- ✓ Client confidentiality - each gets unique URL
-- ✓ Easy file deployment via SCP or WinSCP
-
-### Deployment Guides
-
-- **[deployment/WINDOWS-QUICKSTART.md](deployment/WINDOWS-QUICKSTART.md)** - Simple guide for Windows users
-- **[deployment/DEPLOYMENT.md](deployment/DEPLOYMENT.md)** - Complete deployment reference
-- **[deployment/NAMING-GUIDE.md](deployment/NAMING-GUIDE.md)** - Dashboard naming best practices
-
-### Quick Deploy Commands
+#### First Time Setup (run once)
 
 ```bash
-# 1. Setup server (run once)
-ssh root@your-server-ip
+# Upload setup script
+scp deployment/server-setup.sh root@139.59.64.19:~/gnopartners/
+
+# SSH and run
+ssh root@139.59.64.19
+cd ~/gnopartners
+chmod +x server-setup.sh
 ./server-setup.sh
-
-# 2. Deploy dashboards (run whenever you have new dashboards)
-scp -r generated/* root@your-server-ip:/var/www/ba-dashboards/generated/
-scp -r src/assets/* root@your-server-ip:/var/www/ba-dashboards/assets/
 ```
 
-### Access Model
+Creates username/password for access.
 
-**Important:** Dashboards use link-only access:
-- No directory listing or browsing
-- Each client receives their unique dashboard URL
-- Example: `http://your-server-ip/generated/client-name-abc123.html`
-- Clients cannot see or access other dashboards
-- Perfect for confidential client reports
+#### Deploy Dashboards (every time you add new ones)
 
-## Template System
+From Windows PowerShell:
 
-The dashboard template (`src/templates/dashboard-template.html`) uses placeholder variables that are replaced during generation:
+```powershell
+# Deploy dashboards
+scp -r dashboards\* root@139.59.64.19:/var/www/ba-dashboards/generated/
 
-### Key Placeholders
-
-- `{{COMPANY_NAME}}` - Client company name
-- `{{ANALYST_NAME}}` - Business analyst name
-- `{{ANNUAL_REVENUE}}` - Annual revenue figure
-- `{{METRIC_X_LABEL}}` - KPI metric labels
-- `{{METRIC_X_VALUE}}` - KPI metric values
-- `{{CHART_DATA_JSON}}` - Dynamic chart data (JSON)
-- `{{XXX_CONTENT}}` - Page-specific content sections
-
-## Customization
-
-### Styling
-
-Edit `src/assets/css/dashboard.css` to customize:
-- Colors and theme
-- Glass card effects
-- Animations
-- Typography
-
-### Charts
-
-Modify `src/assets/js/charts.js` to:
-- Change chart types
-- Update default data
-- Adjust chart styling
-
-### Navigation
-
-Update `src/assets/js/navigation.js` to:
-- Add/remove pages
-- Modify page labels
-- Change navigation behavior
-
-## Roadmap
-
-- [ ] Implement PDF parser for extracting data
-- [ ] Implement DOCX parser for extracting data
-- [ ] Build automated dashboard generator
-- [ ] Create web interface for uploading documents
-- [ ] Add authentication system
-- [ ] Implement server hosting setup
-- [ ] Add PDF export functionality
-- [ ] Create dashboard analytics tracking
-- [ ] Build client management system
-- [ ] Add multi-language support
-
-## Development
-
-### Adding a New Page
-
-1. Add navigation button in the template
-2. Create page content section with unique ID
-3. Add page label to `navigation.js`
-4. Style the page content
-
-### Creating Custom Sections
-
-Follow the existing pattern:
-```html
-<div id="custom-page" class="page-content">
-    <div class="glass-card p-10 rounded-3xl">
-        <!-- Your content here -->
-    </div>
-</div>
+# Deploy assets
+scp -r assets\css\* root@139.59.64.19:/var/www/ba-dashboards/assets/css/
+scp -r assets\js\* root@139.59.64.19:/var/www/ba-dashboards/assets/js/
 ```
 
-## Sample Dashboards
+Fix permissions (in SSH):
 
-- **Supersonic Brands**: `generated/supersonic-brands.html`
-  - E-commerce marketplace optimization
-  - PPC efficiency analysis
-  - Multi-market breakdown (USA, UK, Germany)
+```bash
+ssh root@139.59.64.19
+chown -R www-data:www-data /var/www/ba-dashboards
+chmod -R 755 /var/www/ba-dashboards
+```
 
-## Contributing
+### 3. Share Links with Clients
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Submit a pull request
+Each client gets their unique URL:
 
-## License
+```
+http://139.59.64.19/generated/client-name-abc123.html
+```
 
-[Add your license here]
+## How It Works
 
-## Support
+### Security Model
 
-For issues, questions, or contributions, please contact the development team.
+- 🔒 **Password Protected**: All access requires username/password
+- 🔗 **Link-Only**: Clients can ONLY access dashboards via direct link
+- 🚫 **No Browsing**: Directory listing disabled
+- 👤 **Private**: Each client only sees their own dashboard
 
-## Acknowledgments
+### Example
 
-- Built with modern web technologies
-- Designed for professional business analytics presentations
-- Optimized for client-facing deliverables
+```
+Client A: http://139.59.64.19/generated/acme-corp-k7f3m2.html
+Client B: http://139.59.64.19/generated/globex-p9x4n1.html
+
+✓ Client A can access their dashboard
+✗ Client A cannot browse /generated/
+✗ Client A cannot see Client B's dashboard
+```
+
+## Dashboard Naming
+
+Use unique names with random codes:
+
+```
+✓ GOOD:
+client-name-abc123.html
+supersonic-brands-k7f3m2.html
+
+✗ AVOID:
+client1.html          # Too predictable
+my dashboard.html     # Has spaces
+```
+
+See [deployment/NAMING-GUIDE.md](deployment/NAMING-GUIDE.md) for details.
+
+## Documentation
+
+- **[deployment/WINDOWS-QUICKSTART.md](deployment/WINDOWS-QUICKSTART.md)** - Windows step-by-step
+- **[deployment/DEPLOYMENT.md](deployment/DEPLOYMENT.md)** - Complete reference
+- **[deployment/NAMING-GUIDE.md](deployment/NAMING-GUIDE.md)** - Naming best practices
+
+## Common Tasks
+
+### Add New Dashboard
+1. Place HTML in `dashboards/`
+2. Run deployment commands
+3. Share link with client
+
+### Add New User
+```bash
+ssh root@139.59.64.19
+htpasswd /etc/nginx/auth/.htpasswd new-username
+```
+
+### View Logs
+```bash
+ssh root@139.59.64.19
+tail -f /var/log/nginx/ba-dashboards-access.log
+```
+
+---
+
+**Simple: Add HTML → Deploy → Share link → Done!** 🎉
