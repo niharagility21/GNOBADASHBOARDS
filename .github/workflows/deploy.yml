@@ -18,183 +18,107 @@ jobs:
 
       - name: Install sshpass
         run: |
-          sudo apt-get update
+          sudo apt-get update -qq
           sudo apt-get install -y sshpass
 
-      - name: Setup server directories and remove auth
+      - name: Setup server
         run: |
-          echo "Setting up server..."
-          sshpass -p 'TN@qwe4321n' ssh -o StrictHostKeyChecking=no -o ConnectTimeout=30 root@139.59.64.19 << 'ENDSSH'
+          echo "Setting up server directories..."
+          sshpass -p 'TN@qwe4321n' ssh -o StrictHostKeyChecking=no -o ConnectTimeout=30 root@139.59.64.19 \
+            "mkdir -p /var/www/html/generated && chmod -R 755 /var/www/html"
+          echo "✅ Server ready"
 
-          # Create directories
-          mkdir -p /root/gnopartners/generated
-          chmod -R 755 /root/gnopartners
-
-          # Update Nginx config to remove authentication for /generated/
-          cat > /etc/nginx/sites-available/ba-dashboards <<'EOF'
-          server {
-              listen 80;
-              server_name _;
-
-              root /root/gnopartners;
-              index index.html;
-
-              # Disable directory listing
-              autoindex off;
-
-              location /generated/ {
-                  # No authentication required - public access
-                  alias /root/gnopartners/generated/;
-                  try_files $uri $uri/ =404;
-              }
-
-              location /assets/ {
-                  alias /root/gnopartners/assets/;
-                  try_files $uri $uri/ =404;
-              }
-
-              location / {
-                  try_files $uri $uri/ =404;
-              }
-          }
-          EOF
-
-          # Enable site and reload Nginx
-          ln -sf /etc/nginx/sites-available/ba-dashboards /etc/nginx/sites-enabled/
-          nginx -t && systemctl reload nginx
-
-          echo "✅ Server configured - public access enabled"
-          ENDSSH
-
-      - name: Deploy dashboards to server
+      - name: Deploy dashboards
         run: |
-          # Get list of HTML files to deploy (skip files with 'done' suffix)
+          echo "Deploying HTML files..."
           for file in dashboards/*.html; do
             if [ -f "$file" ]; then
               filename=$(basename "$file")
 
-              # Skip files that already have 'done' in the name
+              # Skip files with 'done' suffix
               if [[ "$filename" == *"done"* ]]; then
-                echo "⏭️  Skipping $filename (already has 'done' suffix)"
+                echo "⏭️  Skipping $filename (already processed)"
                 continue
               fi
 
-              echo "Deploying $filename..."
+              echo "📤 Uploading $filename..."
 
-              # Deploy to server with retry logic
-              max_retries=5
-              retry_count=0
-              retry_delay=10
+              # Upload file
+              sshpass -p 'TN@qwe4321n' scp -o StrictHostKeyChecking=no -o ConnectTimeout=30 "$file" root@139.59.64.19:/var/www/html/generated/
 
-              while [ $retry_count -lt $max_retries ]; do
-                # Try to deploy
-                if sshpass -p 'TN@qwe4321n' scp -o StrictHostKeyChecking=no -o ConnectTimeout=30 "$file" root@139.59.64.19:/root/gnopartners/generated/; then
-                  echo "✅ File uploaded successfully"
+              # Rename with 'done' suffix
+              name="${filename%.html}"
+              sshpass -p 'TN@qwe4321n' ssh -o StrictHostKeyChecking=no -o ConnectTimeout=30 root@139.59.64.19 \
+                "cd /var/www/html/generated && mv '$filename' '${name}done.html' && chmod 644 '${name}done.html'"
 
-                  # Rename file on server by adding 'done' suffix
-                  name="${filename%.html}"
-                  if sshpass -p 'TN@qwe4321n' ssh -o StrictHostKeyChecking=no -o ConnectTimeout=30 root@139.59.64.19 \
-                    "cd /root/gnopartners/generated && mv '$filename' '${name}done.html'"; then
-                    echo "✅ Deployed and renamed: ${name}done.html"
-                    break
-                  else
-                    echo "⚠️  Rename failed, but file is uploaded"
-                    break
-                  fi
-                else
-                  retry_count=$((retry_count + 1))
-                  if [ $retry_count -lt $max_retries ]; then
-                    echo "⚠️  Connection failed, retrying in ${retry_delay}s... (attempt $retry_count/$max_retries)"
-                    sleep $retry_delay
-                    retry_delay=$((retry_delay * 2))
-                  else
-                    echo "❌ Failed to deploy after $max_retries attempts"
-                    exit 1
-                  fi
-                fi
-              done
+              echo "✅ Deployed: ${name}done.html"
             fi
           done
 
-      - name: Get live URLs
-        id: get-urls
+      - name: Get URLs
+        id: urls
         run: |
           URLS=""
           for file in dashboards/*.html; do
             if [ -f "$file" ]; then
               filename=$(basename "$file")
-              # Skip files with 'done' in name
-              if [[ "$filename" == *"done"* ]]; then
-                continue
+              if [[ "$filename" != *"done"* ]]; then
+                name="${filename%.html}"
+                URLS="${URLS}http://139.59.64.19/generated/${name}done.html"$'\n'
               fi
-              name="${filename%.html}"
-              URLS="${URLS}http://139.59.64.19/generated/${name}done.html"$'\n'
             fi
           done
           echo "urls<<EOF" >> $GITHUB_OUTPUT
           echo "$URLS" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
-      - name: Send success email
+      - name: Send email
         if: success()
         continue-on-error: true
         run: |
-          URLS="${{ steps.get-urls.outputs.urls }}"
-
-          # Install Python email dependencies
-          python3 -m pip install --quiet --upgrade pip
-
-          # Send email using Python
-          python3 << 'PYEOF'
+          python3 << 'ENDPYTHON'
           import smtplib
           from email.mime.text import MIMEText
           from email.mime.multipart import MIMEMultipart
-          import os
 
-          # Email configuration
-          sender_email = "agilitytechai@gmail.com"
-          sender_password = "wfkp ggxu vyvg donh"
+          sender = "agilitytechai@gmail.com"
+          password = "wfkp ggxu vyvg donh"
           recipients = ["iampreetdave@gmail.com", "anshthakkar4904@gmail.com"]
 
-          urls = """${{ steps.get-urls.outputs.urls }}"""
+          urls = """${{ steps.urls.outputs.urls }}"""
 
-          # Create message
           msg = MIMEMultipart()
-          msg['From'] = f"GNO BA Dashboards <{sender_email}>"
+          msg['From'] = f"GNO Dashboards <{sender}>"
           msg['To'] = ", ".join(recipients)
-          msg['Subject'] = "✅ Dashboard Deployed Successfully"
+          msg['Subject'] = "✅ Dashboard Deployed"
 
-          body = f"""Dashboard deployment completed successfully!
+          body = f"""Dashboard deployment successful!
 
-🔗 Live Website URLs:
+🔗 Live URLs:
 {urls}
 
-📊 Deployment Details:
-- Server: http://139.59.64.19
-- Commit: ${{ github.sha }}
-- Branch: ${{ github.ref_name }}
+Server: http://139.59.64.19
+Commit: ${{ github.sha }}
+Branch: ${{ github.ref_name }}
 
-✅ All dashboards are now live and publicly accessible!
-
----
-GitHub Actions - GNO BA Dashboards"""
+All dashboards are now live!"""
 
           msg.attach(MIMEText(body, 'plain'))
 
-          # Send email
           try:
               server = smtplib.SMTP('smtp.gmail.com', 587)
               server.starttls()
-              server.login(sender_email, sender_password)
+              server.login(sender, password)
               server.send_message(msg)
               server.quit()
-              print("✅ Email sent successfully!")
+              print("✅ Email sent!")
           except Exception as e:
-              print(f"⚠️ Email failed: {e}")
-          PYEOF
+              print(f"⚠️  Email error: {e}")
+          ENDPYTHON
 
-      - name: Deployment complete
+      - name: Complete
         run: |
-          echo "✅ Deployment successful!"
-          echo "🔗 Live URLs (public access, no password required):"
-          echo "${{ steps.get-urls.outputs.urls }}"
+          echo "✅ Deployment complete!"
+          echo ""
+          echo "🔗 Live URLs:"
+          echo "${{ steps.urls.outputs.urls }}"
