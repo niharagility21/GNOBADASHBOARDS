@@ -67,7 +67,7 @@ jobs:
         if: success()
         continue-on-error: true
         run: |
-          python3 << 'END'
+          python3 <<'PYEOF'
           import smtplib
           from email.mime.text import MIMEText
           from email.mime.multipart import MIMEMultipart
@@ -85,11 +85,11 @@ jobs:
 
           body = f"""Deployment successful!
 
-Live URLs:
-{urls}
+          Live URLs:
+          {urls}
 
-Server: http://139.59.64.19
-Commit: ${{ github.sha }}"""
+          Server: http://139.59.64.19
+          Commit: ${{ github.sha }}"""
 
           msg.attach(MIMEText(body, 'plain'))
 
@@ -102,7 +102,7 @@ Commit: ${{ github.sha }}"""
               print("Email sent")
           except Exception as e:
               print(f"Email failed: {e}")
-          END
+          PYEOF
 
       - name: Done
         run: |
