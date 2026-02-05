@@ -25,22 +25,105 @@ jobs:
           ssh-keyscan -H ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
 
       - name: Deploy dashboards to server
+        id: deploy-dashboards
         run: |
           scp -i ~/.ssh/deploy_key -r dashboards/* ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/var/www/ba-dashboards/generated/
+          echo "✅ Dashboards deployed"
 
       - name: Deploy assets to server
+        id: deploy-assets
         run: |
           scp -i ~/.ssh/deploy_key -r assets/* ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/var/www/ba-dashboards/assets/
+          echo "✅ Assets deployed"
 
       - name: Set permissions on server
+        id: set-permissions
         run: |
           ssh -i ~/.ssh/deploy_key ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} "chown -R www-data:www-data /var/www/ba-dashboards && chmod -R 755 /var/www/ba-dashboards"
+          echo "✅ Permissions set"
 
-      - name: Cleanup
+      - name: Get deployed dashboard count
+        id: dashboard-count
+        run: |
+          COUNT=$(find dashboards -name "*.html" | wc -l)
+          echo "count=$COUNT" >> $GITHUB_OUTPUT
+          echo "📊 Deployed $COUNT dashboard(s)"
+
+      - name: Cleanup SSH key
         if: always()
         run: rm -f ~/.ssh/deploy_key
 
-      - name: Deployment success
+      - name: Create hosted marker
+        if: success()
+        run: |
+          echo "✅ Deployed at $(date)" > .hosted
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add .hosted
+          git commit -m "Mark dashboards as hosted [skip ci]" || echo "No changes to commit"
+          git push || echo "Push failed, continuing..."
+
+      - name: Send success email
+        if: success()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: agilitytechai@gmail.com
+          password: "wfkp ggxu vyvg donh"
+          subject: "✅ Dashboard Deployment Successful"
+          to: ansh.t@agilitytech.ai,preet.d@agilitytech.ai,nihar.t@agilitytech.ai
+          from: GNO BA Dashboards <agilitytechai@gmail.com>
+          body: |
+            Dashboard deployment completed successfully!
+
+            📊 Deployment Details:
+            - Dashboards deployed: ${{ steps.dashboard-count.outputs.count }}
+            - Server: http://${{ secrets.SERVER_IP }}
+            - Commit: ${{ github.sha }}
+            - Branch: ${{ github.ref_name }}
+            - Triggered by: ${{ github.actor }}
+
+            🔗 View dashboards at:
+            http://${{ secrets.SERVER_IP }}/generated/
+
+            ✅ All dashboards are now live!
+
+            ---
+            GitHub Actions - GNO BA Dashboards
+
+      - name: Send failure email
+        if: failure()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 587
+          username: agilitytechai@gmail.com
+          password: "wfkp ggxu vyvg donh"
+          subject: "❌ Dashboard Deployment Failed"
+          to: ansh.t@agilitytech.ai,preet.d@agilitytech.ai,nihar.t@agilitytech.ai
+          from: GNO BA Dashboards <agilitytechai@gmail.com>
+          body: |
+            Dashboard deployment failed!
+
+            ❌ Deployment Details:
+            - Server: ${{ secrets.SERVER_IP }}
+            - Commit: ${{ github.sha }}
+            - Branch: ${{ github.ref_name }}
+            - Triggered by: ${{ github.actor }}
+
+            🔍 Check the workflow run for details:
+            https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+            Please review the error logs and try again.
+
+            ---
+            GitHub Actions - GNO BA Dashboards
+
+      - name: Deployment summary
+        if: success()
         run: |
           echo "✅ Deployment successful!"
-          echo "🔗 Dashboards are live at: http://${{ secrets.SERVER_IP }}/generated/"
+          echo "📊 Dashboards deployed: ${{ steps.dashboard-count.outputs.count }}"
+          echo "🔗 Live at: http://${{ secrets.SERVER_IP }}/generated/"
+          echo "📧 Email notification sent!"

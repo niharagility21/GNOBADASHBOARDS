@@ -21,3 +21,6 @@ temp/
 
 # Logs
 *.log
+
+# Hosted marker (created by GitHub Actions)
+.hosted

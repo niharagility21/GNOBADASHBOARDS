@@ -23,10 +23,10 @@ That's it! No manual deployment needed.
    ./server-setup.sh
    ```
 
-2. **Setup GitHub Actions** - Follow [.github/SETUP.md](.github/SETUP.md)
+2. **Setup GitHub Actions** - Follow [SETUP-LINKS.md](SETUP-LINKS.md) ⭐ **CLICK HERE**
    - Generate SSH key
    - Add to server
-   - Add 3 secrets to GitHub
+   - Add 3 secrets to GitHub (direct links provided!)
 
 ### Daily Workflow
 
@@ -107,9 +107,16 @@ The `.github/workflows/deploy.yml` automatically:
 2. ✅ Connects to server via SSH
 3. ✅ Deploys dashboards and assets
 4. ✅ Sets correct permissions
-5. ✅ Dashboards go live instantly
+5. ✅ Creates `.hosted` marker file (tracks deployment)
+6. ✅ Sends email notifications to team
+7. ✅ Dashboards go live instantly
 
 **View deployment status**: Go to GitHub → Actions tab
+
+**Email notifications sent to:**
+- ansh.t@agilitytech.ai
+- preet.d@agilitytech.ai
+- nihar.t@agilitytech.ai
 
 ## Common Tasks
 
