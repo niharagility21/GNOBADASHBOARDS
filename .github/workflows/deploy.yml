@@ -19,13 +19,46 @@ jobs:
       - name: Install sshpass
         run: sudo apt-get update -qq && sudo apt-get install -y sshpass
 
-      - name: Setup server
+      - name: Configure Nginx for public access
         run: |
-          sshpass -p 'TN@qwe4321n' ssh -o StrictHostKeyChecking=no root@139.59.64.19 \
-            "mkdir -p /var/www/html/generated && chmod -R 755 /var/www/html"
+          echo "Configuring Nginx..."
+          sshpass -p 'TN@qwe4321n' ssh -o StrictHostKeyChecking=no root@139.59.64.19 bash <<'ENDSSH'
+
+          # Create directory
+          mkdir -p /var/www/html/generated
+          chmod -R 755 /var/www/html
+
+          # Configure Nginx for public access (no password)
+          cat > /etc/nginx/sites-available/default <<'EOF'
+          server {
+              listen 80 default_server;
+              listen [::]:80 default_server;
+
+              root /var/www/html;
+              index index.html;
+
+              server_name _;
+
+              location / {
+                  try_files $uri $uri/ =404;
+              }
+
+              location /generated/ {
+                  # Public access - no authentication
+                  autoindex off;
+                  try_files $uri $uri/ =404;
+              }
+          }
+          EOF
+
+          # Test and reload Nginx
+          nginx -t && systemctl reload nginx
+          echo "Nginx configured for public access"
+          ENDSSH
 
       - name: Deploy files
         run: |
+          echo "Deploying files..."
           for file in dashboards/*.html; do
             if [ -f "$file" ]; then
               filename=$(basename "$file")
@@ -42,69 +75,86 @@ jobs:
               sshpass -p 'TN@qwe4321n' ssh -o StrictHostKeyChecking=no root@139.59.64.19 \
                 "cd /var/www/html/generated && mv '$filename' '${name}done.html' && chmod 644 '${name}done.html'"
 
-              echo "Done: ${name}done.html"
+              echo "✅ ${name}done.html"
             fi
           done
 
-      - name: Get URLs
+      - name: Get all URLs
         id: urls
         run: |
+          echo "Collecting URLs..."
           URLS=""
           for file in dashboards/*.html; do
             if [ -f "$file" ]; then
               filename=$(basename "$file")
               if [[ "$filename" != *"done"* ]]; then
                 name="${filename%.html}"
-                URLS="${URLS}http://139.59.64.19/generated/${name}done.html"$'\n'
+                URL="http://139.59.64.19/generated/${name}done.html"
+                URLS="${URLS}${URL}"$'\n'
+                echo "URL: $URL"
               fi
             fi
           done
-          echo "urls<<EOF" >> $GITHUB_OUTPUT
-          echo "$URLS" >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
 
-      - name: Send email
+          {
+            echo "urls<<URLEOF"
+            echo "$URLS"
+            echo "URLEOF"
+          } >> $GITHUB_OUTPUT
+
+      - name: Send email with SendGrid API
         if: success()
-        continue-on-error: true
+        env:
+          EMAIL_URLS: ${{ steps.urls.outputs.urls }}
         run: |
-          python3 <<'PYEOF'
-          import smtplib
-          from email.mime.text import MIMEText
-          from email.mime.multipart import MIMEMultipart
+          # Use curl to send email via Gmail SMTP
+          URLS="${EMAIL_URLS}"
 
-          sender = "agilitytechai@gmail.com"
-          password = "wfkp ggxu vyvg donh"
-          recipients = ["iampreetdave@gmail.com", "anshthakkar4904@gmail.com"]
+          # Create email body
+          cat > /tmp/email.txt <<EMAILEOF
+          From: GNO Dashboards <agilitytechai@gmail.com>
+          To: iampreetdave@gmail.com, anshthakkar4904@gmail.com
+          Subject: Dashboard Deployed Successfully
 
-          urls = """${{ steps.urls.outputs.urls }}"""
+          Dashboard deployment completed!
 
-          msg = MIMEMultipart()
-          msg['From'] = f"GNO Dashboards <{sender}>"
-          msg['To'] = ", ".join(recipients)
-          msg['Subject'] = "Dashboard Deployed"
-
-          body = f"""Deployment successful!
-
-          Live URLs:
-          {urls}
+          Live URLs (no password required):
+          ${URLS}
 
           Server: http://139.59.64.19
-          Commit: ${{ github.sha }}"""
+          Commit: ${{ github.sha }}
+          Branch: ${{ github.ref_name }}
 
-          msg.attach(MIMEText(body, 'plain'))
+          All dashboards are now publicly accessible!
+          EMAILEOF
 
-          try:
-              s = smtplib.SMTP('smtp.gmail.com', 587)
-              s.starttls()
-              s.login(sender, password)
-              s.send_message(msg)
-              s.quit()
-              print("Email sent")
-          except Exception as e:
-              print(f"Email failed: {e}")
-          PYEOF
+          # Send to first recipient
+          curl -v --url 'smtps://smtp.gmail.com:465' \
+            --ssl-reqd \
+            --mail-from 'agilitytechai@gmail.com' \
+            --mail-rcpt 'iampreetdave@gmail.com' \
+            --upload-file /tmp/email.txt \
+            --user 'agilitytechai@gmail.com:wfkp ggxu vyvg donh' \
+            --insecure || echo "First email may have failed"
 
-      - name: Done
+          # Send to second recipient
+          curl -v --url 'smtps://smtp.gmail.com:465' \
+            --ssl-reqd \
+            --mail-from 'agilitytechai@gmail.com' \
+            --mail-rcpt 'anshthakkar4904@gmail.com' \
+            --upload-file /tmp/email.txt \
+            --user 'agilitytechai@gmail.com:wfkp ggxu vyvg donh' \
+            --insecure || echo "Second email may have failed"
+
+          echo "Email sending attempted"
+
+      - name: Summary
         run: |
-          echo "Deployment complete"
+          echo "============================================"
+          echo "Deployment Complete!"
+          echo "============================================"
+          echo ""
+          echo "Live URLs (Public Access - No Password):"
           echo "${{ steps.urls.outputs.urls }}"
+          echo ""
+          echo "============================================"
