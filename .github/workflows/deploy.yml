@@ -34,40 +34,10 @@ jobs:
             # Rename with done suffix
             name="${filename%.html}"
             sshpass -p 'TN@qwe4321n' ssh -o StrictHostKeyChecking=no root@139.59.64.19 \
-              "cd /var/www/html/generated && mv '$filename' '${name}done.html'"
+              "cd /var/www/html/generated && mv '$filename' '${name}done.html' && chmod 644 '${name}done.html'"
 
             echo "✅ Deployed: ${name}done.html"
           done
-
-      - name: Configure server (first time only)
-        run: |
-          sshpass -p 'TN@qwe4321n' ssh -o StrictHostKeyChecking=no root@139.59.64.19 'bash -s' <<'SCRIPT'
-          # Create directory
-          mkdir -p /var/www/html/generated
-          chmod -R 755 /var/www/html
-
-          # Remove any password protection
-          if [ -f /etc/nginx/.htpasswd ]; then
-            rm /etc/nginx/.htpasswd
-          fi
-
-          # Simple Nginx config - public access
-          cat > /etc/nginx/sites-available/default <<'EOF'
-          server {
-              listen 80 default_server;
-              root /var/www/html;
-              index index.html;
-              server_name _;
-
-              location / {
-                  try_files $uri $uri/ =404;
-              }
-          }
-          EOF
-
-          nginx -t && systemctl reload nginx
-          echo "Server configured for public access"
-          SCRIPT
 
       - name: Collect URLs
         id: urls
@@ -89,37 +59,51 @@ jobs:
           echo "All URLs:"
           echo "$URLS"
 
-      - name: Send emails
+      - name: Send emails to all recipients
         run: |
           URLS="${{ steps.urls.outputs.urls }}"
 
-          # Email content
-          cat > /tmp/email.txt <<EOF
+          # Create email message
+          cat > /tmp/email.txt <<'EMAILEND'
           From: GNO Dashboards <agilitytechai@gmail.com>
-          To: iampreetdave@gmail.com
-          Subject: Dashboard Deployed
+          Subject: Dashboard Deployed Successfully
 
-          Dashboard deployment successful!
+          Dashboard deployment completed!
 
-          Live URLs:
-          $URLS
+          Live URLs (publicly accessible):
+          EMAILEND
+
+          echo "$URLS" >> /tmp/email.txt
+
+          cat >> /tmp/email.txt <<'EMAILEND'
 
           Server: http://139.59.64.19
           Commit: ${{ github.sha }}
+          Branch: ${{ github.ref_name }}
 
-          All dashboards are publicly accessible!
-          EOF
+          All dashboards are now live and publicly accessible!
+          EMAILEND
 
-          # Send to each recipient
-          for email in iampreetdave@gmail.com anshthakkar4904@gmail.com ansh.t@agilitytech.ai; do
-            curl --url 'smtps://smtp.gmail.com:465' \
+          # Send to all recipients
+          RECIPIENTS=(
+            "iampreetdave@gmail.com"
+            "anshthakkar4904@gmail.com"
+            "nihar.thakkar@agilitytech.ai"
+          )
+
+          for recipient in "${RECIPIENTS[@]}"; do
+            echo "Sending email to: $recipient"
+
+            curl -v --url 'smtps://smtp.gmail.com:465' \
               --ssl-reqd \
               --mail-from 'agilitytechai@gmail.com' \
-              --mail-rcpt "$email" \
+              --mail-rcpt "$recipient" \
               --user 'agilitytechai@gmail.com:wfkp ggxu vyvg donh' \
               --upload-file /tmp/email.txt \
-              --insecure 2>&1 | grep -E "(OK|250|sent)" || true
-            echo "Email sent to $email"
+              --insecure 2>&1 | tail -20
+
+            echo "✅ Email sent to: $recipient"
+            echo "---"
           done
 
       - name: Summary
@@ -130,5 +114,10 @@ jobs:
           echo ""
           echo "Public URLs (no password required):"
           echo "${{ steps.urls.outputs.urls }}"
+          echo ""
+          echo "Emails sent to:"
+          echo "  - iampreetdave@gmail.com"
+          echo "  - anshthakkar4904@gmail.com"
+          echo "  - nihar.thakkar@agilitytech.ai"
           echo ""
           echo "=========================================="
