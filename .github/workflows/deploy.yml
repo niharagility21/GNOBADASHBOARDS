@@ -17,6 +17,9 @@ jobs:
 
       - name: Deploy NEW files only
         run: |
+          # Track deployed files
+          > /tmp/deployed_files.txt
+
           # Deploy only NEW files (without -posted suffix)
           for file in dashboards/*.html; do
             [ -f "$file" ] || continue
@@ -38,6 +41,9 @@ jobs:
             name="${filename%.html}"
             sshpass -p 'TN@qwe4321n' ssh -o StrictHostKeyChecking=no root@139.59.64.19 \
               "cd /var/www/html/generated && mv '$filename' '${name}-posted.html' && chmod 644 '${name}-posted.html'"
+
+            # Track this file as deployed
+            echo "${name}" >> /tmp/deployed_files.txt
 
             echo "✅ Deployed: ${name}-posted.html"
           done
@@ -66,24 +72,23 @@ jobs:
           git config user.email "actions@github.com"
           git diff --quiet && git diff --staged --quiet || (git commit -m "Mark files as posted [skip ci]" && git push)
 
-      - name: Collect NEW URLs
+      - name: Collect NEW URLs only
         id: urls
         run: |
           URLS=""
-          for file in dashboards/*-posted.html; do
-            [ -f "$file" ] || continue
-            filename=$(basename "$file")
 
-            # Get the name without -posted.html
-            name="${filename%-posted.html}"
-            URLS="${URLS}https://gnodashboards.duckdns.org/generated/${name}-posted.html"$'\n'
-          done
+          # Only collect URLs for files deployed in THIS run
+          if [ -f /tmp/deployed_files.txt ]; then
+            while IFS= read -r name; do
+              URLS="${URLS}https://gnodashboards.duckdns.org/generated/${name}-posted.html"$'\n'
+            done < /tmp/deployed_files.txt
+          fi
 
           echo "urls<<EOF" >> $GITHUB_OUTPUT
           echo "$URLS" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
-          echo "New URLs:"
+          echo "New URLs (only from this deployment):"
           echo "$URLS"
 
       - name: Send emails
@@ -149,7 +154,7 @@ jobs:
           echo "DEPLOYMENT COMPLETE"
           echo "=========================================="
           echo ""
-          echo "New URLs (no password required):"
+          echo "New URLs (only from this deployment):"
           echo "${{ steps.urls.outputs.urls }}"
           echo ""
           echo "Emails sent to:"
