@@ -53,7 +53,7 @@ jobs:
             # Only show URLs for files that were just deployed (no -posted suffix yet)
             if [[ "$filename" != *"-posted"* ]]; then
               name="${filename%.html}"
-              URLS="${URLS}http://139.59.64.19/generated/${name}-posted.html"$'\n'
+              URLS="${URLS}https://gnodashboards.duckdns.org/generated/${name}-posted.html"$'\n'
             fi
           done
 
@@ -99,13 +99,13 @@ jobs:
 
           body = f"""New dashboard deployed successfully!
 
-          Live URLs (publicly accessible):
+          Live URLs (HTTPS - secure and publicly accessible):
           {urls}
 
-          Server: http://139.59.64.19
+          Domain: https://gnodashboards.duckdns.org
           Commit: ${{ github.sha }}
 
-          All dashboards are publicly accessible!"""
+          All dashboards are now live with HTTPS!"""
 
           msg.attach(MIMEText(body, 'plain'))
 
