@@ -42,19 +42,41 @@ jobs:
             echo "✅ Deployed: ${name}-posted.html"
           done
 
-      - name: Collect NEW URLs
-        id: urls
+      - name: Rename files in repo with -posted suffix
         run: |
-          URLS=""
+          # Rename files in git repo to match server
           for file in dashboards/*.html; do
             [ -f "$file" ] || continue
             filename=$(basename "$file")
 
-            # Only show URLs for files that were just deployed (no -posted or done suffix)
-            if [[ "$filename" != *"-posted"* ]] && [[ "$filename" != *"done.html" ]]; then
-              name="${filename%.html}"
-              URLS="${URLS}https://gnodashboards.duckdns.org/generated/${name}-posted.html"$'\n'
+            # Skip files already with -posted or done suffix
+            if [[ "$filename" == *"-posted"* ]] || [[ "$filename" == *"done.html" ]]; then
+              continue
             fi
+
+            # Rename in repo
+            name="${filename%.html}"
+            git mv "$file" "dashboards/${name}-posted.html"
+            echo "✅ Renamed in repo: ${name}-posted.html"
+          done
+
+      - name: Commit renamed files
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Mark files as posted [skip ci]" && git push)
+
+      - name: Collect NEW URLs
+        id: urls
+        run: |
+          URLS=""
+          for file in dashboards/*-posted.html; do
+            [ -f "$file" ] || continue
+            filename=$(basename "$file")
+
+            # Get the name without -posted.html
+            name="${filename%-posted.html}"
+            URLS="${URLS}https://gnodashboards.duckdns.org/generated/${name}-posted.html"$'\n'
           done
 
           echo "urls<<EOF" >> $GITHUB_OUTPUT
