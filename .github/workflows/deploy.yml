@@ -15,96 +15,111 @@ jobs:
       - name: Install sshpass
         run: sudo apt-get update -qq && sudo apt-get install -y sshpass
 
-      - name: Deploy to server
+      - name: Deploy NEW files only
         run: |
-          # Deploy each HTML file
+          # Deploy only NEW files (without -posted suffix)
           for file in dashboards/*.html; do
             [ -f "$file" ] || continue
             filename=$(basename "$file")
 
-            # Skip files already processed
-            [[ "$filename" == *"done"* ]] && continue
+            # Skip files already posted
+            if [[ "$filename" == *"-posted"* ]]; then
+              echo "⏭️  Skip: $filename (already posted)"
+              continue
+            fi
 
-            echo "Deploying: $filename"
+            echo "📤 Deploying: $filename"
 
             # Upload file
             sshpass -p 'TN@qwe4321n' scp -o StrictHostKeyChecking=no "$file" \
               root@139.59.64.19:/var/www/html/generated/
 
-            # Rename with done suffix
+            # Rename with -posted suffix on server
             name="${filename%.html}"
             sshpass -p 'TN@qwe4321n' ssh -o StrictHostKeyChecking=no root@139.59.64.19 \
-              "cd /var/www/html/generated && mv '$filename' '${name}done.html' && chmod 644 '${name}done.html'"
+              "cd /var/www/html/generated && mv '$filename' '${name}-posted.html' && chmod 644 '${name}-posted.html'"
 
-            echo "✅ Deployed: ${name}done.html"
+            echo "✅ Deployed: ${name}-posted.html"
           done
 
-      - name: Collect URLs
+      - name: Collect NEW URLs
         id: urls
         run: |
           URLS=""
           for file in dashboards/*.html; do
             [ -f "$file" ] || continue
             filename=$(basename "$file")
-            [[ "$filename" == *"done"* ]] && continue
 
-            name="${filename%.html}"
-            URLS="${URLS}http://139.59.64.19/generated/${name}done.html"$'\n'
+            # Only show URLs for files that were just deployed (no -posted suffix yet)
+            if [[ "$filename" != *"-posted"* ]]; then
+              name="${filename%.html}"
+              URLS="${URLS}http://139.59.64.19/generated/${name}-posted.html"$'\n'
+            fi
           done
 
           echo "urls<<EOF" >> $GITHUB_OUTPUT
           echo "$URLS" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
-          echo "All URLs:"
+          echo "New URLs:"
           echo "$URLS"
 
-      - name: Send emails to all recipients
+      - name: Send emails
         run: |
           URLS="${{ steps.urls.outputs.urls }}"
 
-          # Create email message
-          cat > /tmp/email.txt <<'EMAILEND'
-          From: GNO Dashboards <agilitytechai@gmail.com>
-          Subject: Dashboard Deployed Successfully
+          # Skip if no new files
+          if [ -z "$URLS" ]; then
+            echo "No new files deployed, skipping email"
+            exit 0
+          fi
 
-          Dashboard deployment completed!
+          # Send email using Python
+          python3 << 'PYEND'
+          import smtplib
+          from email.mime.text import MIMEText
+          from email.mime.multipart import MIMEMultipart
+
+          # Email config
+          sender = "agilitytechai@gmail.com"
+          password = "djjj kkhw mieu qisz"
+          recipients = [
+              "iampreetdave@gmail.com",
+              "anshthakkar4904@gmail.com",
+              "nihar.thakkar@agilitytech.ai"
+          ]
+
+          urls = """${{ steps.urls.outputs.urls }}"""
+
+          # Create email
+          msg = MIMEMultipart()
+          msg['From'] = f"GNO Dashboards <{sender}>"
+          msg['To'] = ", ".join(recipients)
+          msg['Subject'] = "New Dashboard Deployed"
+
+          body = f"""New dashboard deployed successfully!
 
           Live URLs (publicly accessible):
-          EMAILEND
-
-          echo "$URLS" >> /tmp/email.txt
-
-          cat >> /tmp/email.txt <<'EMAILEND'
+          {urls}
 
           Server: http://139.59.64.19
           Commit: ${{ github.sha }}
-          Branch: ${{ github.ref_name }}
 
-          All dashboards are now live and publicly accessible!
-          EMAILEND
+          All dashboards are publicly accessible!"""
 
-          # Send to all recipients
-          RECIPIENTS=(
-            "iampreetdave@gmail.com"
-            "anshthakkar4904@gmail.com"
-            "nihar.thakkar@agilitytech.ai"
-          )
+          msg.attach(MIMEText(body, 'plain'))
 
-          for recipient in "${RECIPIENTS[@]}"; do
-            echo "Sending email to: $recipient"
-
-            curl -v --url 'smtps://smtp.gmail.com:465' \
-              --ssl-reqd \
-              --mail-from 'agilitytechai@gmail.com' \
-              --mail-rcpt "$recipient" \
-              --user 'agilitytechai@gmail.com:wfkp ggxu vyvg donh' \
-              --upload-file /tmp/email.txt \
-              --insecure 2>&1 | tail -20
-
-            echo "✅ Email sent to: $recipient"
-            echo "---"
-          done
+          # Send email
+          try:
+              server = smtplib.SMTP('smtp.gmail.com', 587)
+              server.starttls()
+              server.login(sender, password)
+              server.send_message(msg)
+              server.quit()
+              print("✅ Emails sent successfully to all recipients!")
+          except Exception as e:
+              print(f"❌ Email failed: {e}")
+          PYEND
 
       - name: Summary
         run: |
@@ -112,7 +127,7 @@ jobs:
           echo "DEPLOYMENT COMPLETE"
           echo "=========================================="
           echo ""
-          echo "Public URLs (no password required):"
+          echo "New URLs (no password required):"
           echo "${{ steps.urls.outputs.urls }}"
           echo ""
           echo "Emails sent to:"
