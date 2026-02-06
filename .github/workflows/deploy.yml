@@ -22,8 +22,8 @@ jobs:
             [ -f "$file" ] || continue
             filename=$(basename "$file")
 
-            # Skip files already posted
-            if [[ "$filename" == *"-posted"* ]]; then
+            # Skip files already posted (with -posted suffix or ending in done)
+            if [[ "$filename" == *"-posted"* ]] || [[ "$filename" == *"done.html" ]]; then
               echo "⏭️  Skip: $filename (already posted)"
               continue
             fi
@@ -50,8 +50,8 @@ jobs:
             [ -f "$file" ] || continue
             filename=$(basename "$file")
 
-            # Only show URLs for files that were just deployed (no -posted suffix yet)
-            if [[ "$filename" != *"-posted"* ]]; then
+            # Only show URLs for files that were just deployed (no -posted or done suffix)
+            if [[ "$filename" != *"-posted"* ]] && [[ "$filename" != *"done.html" ]]; then
               name="${filename%.html}"
               URLS="${URLS}https://gnodashboards.duckdns.org/generated/${name}-posted.html"$'\n'
             fi
