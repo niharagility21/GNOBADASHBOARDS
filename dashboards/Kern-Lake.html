@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+
+<html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Global Executive Intelligence</title> <script src="https://cdn.tailwindcss.com"></script> <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"> <style> :root { --bg-color: #030712; --text-color: #f3f4f6; --card-bg: rgba(17, 24, 39, 0.7); --border-color: rgba(255, 255, 255, 0.1); --sidebar-bg: #030712; } .light-mode { --bg-color: #f9fafb; --text-color: #111827; --card-bg: rgba(255, 255, 255, 0.9); --border-color: rgba(0, 0, 0, 0.05); --sidebar-bg: #ffffff; } body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-color); color: var(--text-color); transition: all 0.3s ease; } .glass-card { background: var(--card-bg); backdrop-filter: blur(12px); border: 1px solid var(--border-color); border-radius: 1rem; } .sidebar { width: 280px; height: 100vh; position: fixed; left: 0; top: 0; background: var(--sidebar-bg); border-right: 1px solid var(--border-color); z-index: 50; padding: 2rem; } .main-content { margin-left: 280px; padding: 2.5rem; } .nav-link { padding: 0.75rem 1rem; border-radius: 0.5rem; cursor: pointer; transition: all 0.2s; margin-bottom: 0.25rem; display: block; font-size: 0.875rem; font-weight: 500; } .nav-link:hover { background: rgba(59, 130, 246, 0.1); color: #3b82f6; } .nav-link.active { background: #3b82f6; color: white; } .page { display: none; } .page.active { display: block; animation: fadeIn 0.4s ease; } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    .switch { position: relative; display: inline-block; width: 44px; height: 22px; }
+    .switch input { opacity: 0; width: 0; height: 0; }
+    .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #374151; transition: .4s; border-radius: 22px; }
+    .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+    input:checked + .slider { background-color: #3b82f6; }
+    input:checked + .slider:before { transform: translateX(22px); }
+</style>
+</head> <body class="dark">
+
+<aside class="sidebar">
+    <img src="https://drive.google.com/thumbnail?id=1uP-fp7HbzpHUK473hJdO6zD2r9mfGac1&sz=w1000" alt="GNO Partners" class="h-10 w-auto mb-6 block">
+    
+    <div class="flex items-center gap-3 px-2 mb-8">
+        <label class="switch">
+            <input type="checkbox" id="themeToggle">
+            <span class="slider"></span>
+        </label>
+        <span class="text-[10px] font-bold uppercase tracking-widest opacity-60">Theme Mode</span>
+    </div>
+
+    <nav class="flex-1">
+        <div onclick="showPage('summary')" class="nav-link active" id="nav-summary">Executive Summary</div>
+        <div onclick="showPage('adstack')" class="nav-link" id="nav-adstack">Ad Stack Efficiency</div>
+        <div onclick="showPage('financial')" class="nav-link" id="nav-financial">Financial Recovery</div>
+        <div onclick="showPage('roadmap')" class="nav-link" id="nav-roadmap">Growth Roadmap</div>
+        <div class="mt-8 mb-2 px-3 text-[10px] font-bold uppercase tracking-widest opacity-40">Deep Dives</div>
+        <div onclick="showPage('usa-dive')" class="nav-link" id="nav-usa-dive">USA Deep-Dive</div>
+        <div onclick="showPage('canada-dive')" class="nav-link" id="nav-canada-dive">Canada Deep-Dive</div>
+        <div onclick="showPage('mexico-dive')" class="nav-link" id="nav-mexico-dive">Mexico Deep-Dive</div>
+    </nav>
+</aside>
+
+<main class="main-content">
+    <div id="summary" class="page active">
+        <header class="mb-10">
+            <h1 class="text-3xl font-extrabold tracking-tight mb-2">Executive Summary</h1>
+            <p class="opacity-60">Kern Lake | Doug Burley Audit Output</p>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+            <div class="glass-card p-6">
+                <p class="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-1">Annual Revenue</p>
+                <h3 class="text-2xl font-bold">$321,732</h3>
+            </div>
+            <div class="glass-card p-6">
+                <p class="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-1">Total Parent ASINs</p>
+                <h3 class="text-2xl font-bold">30</h3>
+            </div>
+            <div class="glass-card p-6">
+                <p class="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-1">Recoverable Savings</p>
+                <h3 class="text-2xl font-bold text-blue-500">$1.3K+</h3>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="glass-card p-8">
+                <h4 class="text-sm font-bold mb-6 uppercase tracking-widest opacity-60">PPC Reliance vs Spend Dilution</h4>
+                <div class="h-[300px]"><canvas id="barChart"></canvas></div>
+            </div>
+            <div class="glass-card p-8">
+                <h4 class="text-sm font-bold mb-6 uppercase tracking-widest opacity-60">Organic Ranking Potential</h4>
+                <div class="h-[300px]"><canvas id="lineChart"></canvas></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="adstack" class="page">
+        <header class="mb-10">
+            <h1 class="text-3xl font-extrabold tracking-tight mb-2">Ad Stack Efficiency</h1>
+        </header>
+        <div class="glass-card p-8">
+            <table class="w-full text-left">
+                <thead>
+                    <tr class="border-b border-white/5 uppercase text-[10px] tracking-widest opacity-50">
+                        <th class="pb-4">Marketplace</th>
+                        <th class="pb-4">PPC Reliance</th>
+                        <th class="pb-4">Spend Dilution</th>
+                    </tr>
+                </thead>
+                <tbody class="text-sm">
+                    <tr class="border-b border-white/5">
+                        <td class="py-4 font-bold">USA</td>
+                        <td class="py-4">0%</td>
+                        <td class="py-4">null</td>
+                    </tr>
+                    <tr class="border-b border-white/5">
+                        <td class="py-4 font-bold">Canada</td>
+                        <td class="py-4">null</td>
+                        <td class="py-4">null</td>
+                    </tr>
+                    <tr class="border-b border-white/5">
+                        <td class="py-4 font-bold">Mexico</td>
+                        <td class="py-4">null</td>
+                        <td class="py-4">null</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="financial" class="page">
+        <header class="mb-10">
+            <h1 class="text-3xl font-extrabold tracking-tight mb-2">Financial Recovery</h1>
+        </header>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="glass-card p-8">
+                <h3 class="font-bold text-lg mb-4">Recovery Audit</h3>
+                <div class="space-y-4">
+                    <div class="flex justify-between border-b border-white/5 pb-2"><span>Cashback (Amex Gold)</span><span class="font-bold text-green-500">$1.3K+</span></div>
+                    <div class="flex justify-between border-b border-white/5 pb-2"><span>Billing Threshold</span><span class="font-bold">$10K</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="roadmap" class="page">
+        <header class="mb-10">
+            <h1 class="text-3xl font-extrabold tracking-tight mb-2">Growth Roadmap</h1>
+        </header>
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="glass-card p-8">
+                <h3 class="font-bold text-lg mb-4 text-blue-500">PPC Restructuring</h3>
+                <ul class="text-sm space-y-2 opacity-80">
+                    <li>• Transition to GNO Partners' PPC Management System</li>
+                    <li>• Launch quick-win campaigns with low ACOS</li>
+                    <li>• Recruit & Train a dedicated VA for 80% of tasks</li>
+                </ul>
+            </div>
+            <div class="glass-card p-8">
+                <h3 class="font-bold text-lg mb-4 text-emerald-500">ASIN Relaunch Tactics</h3>
+                <ul class="text-sm space-y-2 opacity-80">
+                    <li>• Redo main images for high CTR focus</li>
+                    <li>• Add high-quality secondary infographics (ASIN 1,2,3)</li>
+                    <li>• Merge reviews across variations (ASIN 5,8)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="usa-dive" class="page">
+        <header class="mb-10"><h1 class="text-3xl font-extrabold tracking-tight">USA Deep-Dive</h1></header>
+        <div class="glass-card p-8">
+            <h3 class="font-bold mb-4">Marketplace Inefficiencies</h3>
+            <ul class="space-y-2 text-sm opacity-80">
+                <li class="p-4 bg-red-500/5 rounded-lg border border-red-500/10">• Not doing PPC at all</li>
+                <li class="p-4 bg-red-500/5 rounded-lg border border-red-500/10">• Delivery speed: 8% Same Day/Tomorrow (Conversion Risk)</li>
+            </ul>
+        </div>
+    </div>
+    <div id="canada-dive" class="page"><div class="glass-card p-8 text-center opacity-50">No specific Canada data extracted.</div></div>
+    <div id="mexico-dive" class="page"><div class="glass-card p-8 text-center opacity-50">No specific Mexico data extracted.</div></div>
+</main>
+
+<script>
+    const body = document.body;
+    const themeToggle = document.getElementById('themeToggle');
+    let barChart, lineChart;
+
+    if (localStorage.getItem('theme') === 'light') { body.classList.add('light-mode'); themeToggle.checked = true; }
+
+    themeToggle.addEventListener('change', () => {
+        body.classList.toggle('light-mode');
+        localStorage.setItem('theme', body.classList.contains('light-mode') ? 'light' : 'dark');
+        updateCharts();
+    });
+
+    function showPage(pageId) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+        document.getElementById(pageId).classList.add('active');
+        document.getElementById('nav-' + pageId).classList.add('active');
+    }
+
+    function getColors() {
+        const isLight = body.classList.contains('light-mode');
+        return { text: isLight ? '#111827' : '#f3f4f6', grid: isLight ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.05)' };
+    }
+
+    function initCharts() {
+        const colors = getColors();
+        barChart = new Chart(document.getElementById('barChart'), {
+            type: 'bar',
+            data: {
+                labels: ['USA', 'Canada', 'Mexico'],
+                datasets: [
+                    { label: 'PPC Reliance %', data: [0, 0, 0], backgroundColor: '#3b82f6', borderRadius: 4 },
+                    { label: 'Spend Dilution %', data: [0, 0, 0], backgroundColor: '#ef4444', borderRadius: 4 }
+                ]
+            },
+            options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 100, grid: { color: colors.grid }, ticks: { color: colors.text } }, x: { grid: { display: false }, ticks: { color: colors.text } } }, plugins: { legend: { labels: { color: colors.text } } } }
+        });
+
+        lineChart = new Chart(document.getElementById('lineChart'), {
+            type: 'line',
+            data: {
+                labels: ['Current', 'PPC Launch', 'Optimization', 'Target'],
+                datasets: [{ label: 'Growth potential', data: [20, 45, 75, 95], borderColor: '#10b981', backgroundColor: 'rgba(16, 185, 129, 0.1)', fill: true, tension: 0.4 }]
+            },
+            options: { responsive: true, maintainAspectRatio: false, scales: { y: { display: false }, x: { grid: { display: false }, ticks: { color: colors.text } } }, plugins: { legend: { display: false } } }
+        });
+    }
+
+    function updateCharts() {
+        const colors = getColors();
+        [barChart, lineChart].forEach(c => {
+            c.options.scales.x.ticks.color = colors.text;
+            if (c.options.scales.y.ticks) c.options.scales.y.ticks.color = colors.text;
+            if (c.options.scales.y.grid) c.options.scales.y.grid.color = colors.grid;
+            c.options.plugins.legend.labels.color = colors.text;
+            c.update();
+        });
+    }
+
+    initCharts();
+</script>
+</body> </html>
