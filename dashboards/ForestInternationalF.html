@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Executive Intelligence | Forest International</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #030712;
+            --text-color: #f3f4f6;
+            --card-bg: rgba(17, 24, 39, 0.7);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --nav-hover: rgba(59, 130, 246, 0.1);
+        }
+        .light-mode {
+            --bg-color: #f9fafb;
+            --text-color: #111827;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --border-color: rgba(0, 0, 0, 0.05);
+            --nav-hover: rgba(0, 0, 0, 0.05);
+        }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+        .glass-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+        }
+        .sidebar {
+            width: 280px;
+            height: 100vh;
+            position: fixed;
+            left: 0; top: 0;
+            background: var(--bg-color);
+            border-right: 1px solid var(--border-color);
+            z-index: 50;
+        }
+        .main-content { margin-left: 280px; padding: 2.5rem; }
+        .nav-link {
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 0.25rem;
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        .nav-link:hover { background: var(--nav-hover); color: #3b82f6; }
+        .nav-link.active { background: #3b82f6; color: white; }
+        .page { display: none; }
+        .page.active { display: block; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Toggle Switch */
+        .switch { position: relative; display: inline-block; width: 44px; height: 22px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #374151; transition: .4s; border-radius: 22px; }
+        .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .slider { background-color: #3b82f6; }
+        input:checked + .slider:before { transform: translateX(22px); }
+    </style>
+</head>
+<body class="dark">
+
+    <aside class="sidebar p-6 flex flex-col">
+        <div class="mb-8">
+            <img src="https://drive.google.com/thumbnail?id=1uP-fp7HbzpHUK473hJdO6zD2r9mfGac1&sz=w1000" alt="GNO Partners" class="h-10 w-auto mb-6">
+            
+            <div class="flex items-center gap-3 px-2">
+                <label class="switch">
+                    <input type="checkbox" id="themeToggle">
+                    <span class="slider"></span>
+                </label>
+                <span class="text-[10px] font-bold uppercase tracking-widest opacity-60">Theme Mode</span>
+            </div>
+        </div>
+
+        <nav class="flex-1">
+            <div onclick="showPage('summary')" class="nav-link active" id="nav-summary">Executive Summary</div>
+            <div onclick="showPage('adstack')" class="nav-link" id="nav-adstack">Ad Stack Efficiency</div>
+            <div onclick="showPage('financial')" class="nav-link" id="nav-financial">Financial Recovery</div>
+            <div onclick="showPage('roadmap')" class="nav-link" id="nav-roadmap">Growth Roadmap</div>
+            <div class="mt-8 mb-2 px-3 text-[10px] font-bold uppercase tracking-widest opacity-40">Marketplaces</div>
+            <div onclick="showPage('global-dive')" class="nav-link" id="nav-global-dive">Global Deep-Dive</div>
+        </nav>
+
+        <div class="mt-auto pt-6 border-t border-gray-800/10 text-[10px] opacity-40 uppercase tracking-tighter">
+            Forest International Audit<br>Internal ID: Bar Nissim
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <div id="summary" class="page active">
+            <header class="mb-10">
+                <h1 class="text-3xl font-extrabold tracking-tight mb-2">Executive Summary</h1>
+                <p class="opacity-60">Revenue Benchmark: $2,543,082</p>
+            </header>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+                <div class="glass-card p-6">
+                    <p class="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-1">Annual Revenue</p>
+                    <h3 class="text-2xl font-bold">$2,543,082</h3>
+                </div>
+                <div class="glass-card p-6">
+                    <p class="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-1">Total Parent ASINs</p>
+                    <h3 class="text-2xl font-bold">35</h3>
+                </div>
+                <div class="glass-card p-6">
+                    <p class="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-1">Unharvested KWs</p>
+                    <h3 class="text-2xl font-bold text-blue-500">528</h3>
+                </div>
+                <div class="glass-card p-6">
+                    <p class="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-1">B2B Contribution</p>
+                    <h3 class="text-2xl font-bold">9.5%</h3>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="glass-card p-8">
+                    <h4 class="text-sm font-bold mb-6 uppercase tracking-widest opacity-60">PPC Reliance vs Spend Dilution</h4>
+                    <div class="h-[300px]"><canvas id="barChart"></canvas></div>
+                </div>
+                <div class="glass-card p-8">
+                    <h4 class="text-sm font-bold mb-6 uppercase tracking-widest opacity-60">Organic Ranking Potential</h4>
+                    <div class="h-[300px]"><canvas id="lineChart"></canvas></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="adstack" class="page">
+            <header class="mb-10">
+                <h1 class="text-3xl font-extrabold tracking-tight mb-2">Ad Stack Efficiency</h1>
+            </header>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="glass-card p-6 border-l-4 border-blue-500">
+                    <p class="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-1">PPC Sales Reliance</p>
+                    <h3 class="text-3xl font-bold">64%</h3>
+                </div>
+                <div class="glass-card p-6 border-l-4 border-red-500">
+                    <p class="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-1">Auto/Broad Dilution</p>
+                    <h3 class="text-3xl font-bold">81%</h3>
+                </div>
+                <div class="glass-card p-6 border-l-4 border-yellow-500">
+                    <p class="text-[10px] font-bold uppercase tracking-widest opacity-50 mb-1">TOS Placement</p>
+                    <h3 class="text-3xl font-bold">27%</h3>
+                </div>
+            </div>
+
+            <div class="glass-card p-8">
+                <h3 class="font-bold mb-4">Targeting Efficiency</h3>
+                <div class="space-y-4">
+                    <div class="flex justify-between p-4 bg-black/5 rounded-lg border border-white/5">
+                        <span class="text-sm">Organic Sales Share</span>
+                        <span class="font-bold">36%</span>
+                    </div>
+                    <div class="flex justify-between p-4 bg-black/5 rounded-lg border border-white/5 text-red-400">
+                        <span class="text-sm">Budget Waste (Auto/Broad)</span>
+                        <span class="font-bold">81%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="financial" class="page">
+            <header class="mb-10">
+                <h1 class="text-3xl font-extrabold tracking-tight mb-2">Financial Recovery</h1>
+            </header>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="glass-card p-8">
+                    <h3 class="font-bold text-lg mb-4 text-blue-500">Cash Flow Optimization</h3>
+                    <ul class="space-y-4 text-sm opacity-80">
+                        <li>• <strong>Freight Terms:</strong> Leverage exclusive 60-day credit terms via GNO Partners.</li>
+                        <li>• <strong>Supplier Terms:</strong> Negotiate improved payment terms using GNO negotiation tactics.</li>
+                    </ul>
+                </div>
+                <div class="glass-card p-8">
+                    <h3 class="font-bold text-lg mb-4 text-emerald-500">Quick Wins</h3>
+                    <p class="text-sm opacity-80 italic">"Launch quick-win campaigns to drive immediate sales boosts with low ACOS."</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="global-dive" class="page">
+            <header class="mb-10">
+                <h1 class="text-3xl font-extrabold tracking-tight mb-2">Global Deep-Dive</h1>
+            </header>
+            <div class="glass-card p-8">
+                <h3 class="font-bold text-lg mb-6">Key Inefficiencies (Verbatim)</h3>
+                <ul class="space-y-4">
+                    <li class="flex gap-4 items-start"><div class="w-1.5 h-1.5 rounded-full bg-red-500 mt-2"></div><p class="text-sm italic">"shared portfolios reducing control"</p></li>
+                    <li class="flex gap-4 items-start"><div class="w-1.5 h-1.5 rounded-full bg-red-500 mt-2"></div><p class="text-sm italic">"81% of spend sits in Auto/Broad"</p></li>
+                    <li class="flex gap-4 items-start"><div class="w-1.5 h-1.5 rounded-full bg-red-500 mt-2"></div><p class="text-sm italic">"only 27% is allocated to Top of Search"</p></li>
+                    <li class="flex gap-4 items-start"><div class="w-1.5 h-1.5 rounded-full bg-red-500 mt-2"></div><p class="text-sm italic">"528 high-CVR, low-ACOS non-branded keywords remain unharvested"</p></li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="roadmap" class="page">
+            <header class="mb-10">
+                <h1 class="text-3xl font-extrabold tracking-tight mb-2">Growth Roadmap</h1>
+            </header>
+            <div class="space-y-6">
+                <div class="glass-card p-8">
+                    <h4 class="text-blue-500 font-bold uppercase text-xs mb-4">PPC Restructuring Actions</h4>
+                    <ul class="text-sm space-y-2 opacity-80">
+                        <li>• Harvest 528 keyword opportunities.</li>
+                        <li>• Create targeted Manual campaigns focusing on converting targets.</li>
+                        <li>• Transition to GNO Partners' PPC Management System for scaling.</li>
+                        <li>• Recruit and train dedicated VA to handle 80% of technical tasks.</li>
+                    </ul>
+                </div>
+                <div class="glass-card p-8">
+                    <h4 class="text-emerald-500 font-bold uppercase text-xs mb-4">ASIN Relaunch Strategy</h4>
+                    <p class="text-sm opacity-80">Relaunch Focus: ASIN 1 to ASIN 15.</p>
+                    <p class="text-sm opacity-80 mt-2">Objective: Improve rankings to significantly increase market share within niche.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        let barChart, lineChart;
+
+        if(localStorage.getItem('theme') === 'light') {
+            body.classList.add('light-mode');
+            themeToggle.checked = true;
+        }
+
+        themeToggle.addEventListener('change', () => {
+            if(themeToggle.checked) {
+                body.classList.add('light-mode');
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.classList.remove('light-mode');
+                localStorage.setItem('theme', 'dark');
+            }
+            updateCharts();
+        });
+
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            document.getElementById('nav-' + pageId).classList.add('active');
+            window.scrollTo(0,0);
+        }
+
+        function getChartColors() {
+            const isLight = body.classList.contains('light-mode');
+            return {
+                text: isLight ? '#111827' : '#f3f4f6',
+                grid: isLight ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.05)'
+            };
+        }
+
+        function initCharts() {
+            const colors = getChartColors();
+            
+            barChart = new Chart(document.getElementById('barChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Global'],
+                    datasets: [
+                        { label: 'PPC Reliance %', data: [64], backgroundColor: '#3b82f6', borderRadius: 4 },
+                        { label: 'Spend Dilution %', data: [81], backgroundColor: '#ef4444', borderRadius: 4 }
+                    ]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, max: 100, grid: { color: colors.grid }, ticks: { color: colors.text } },
+                        x: { grid: { display: false }, ticks: { color: colors.text } }
+                    },
+                    plugins: { legend: { labels: { color: colors.text } } }
+                }
+            });
+
+            lineChart = new Chart(document.getElementById('lineChart'), {
+                type: 'line',
+                data: {
+                    labels: ['Current (36%)', 'Phase 1', 'Phase 2', 'Target Optimal'],
+                    datasets: [{
+                        label: 'Ranking Potential',
+                        data: [36, 55, 78, 95],
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        fill: true, tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    scales: {
+                        y: { beginAtZero: true, max: 100, grid: { color: colors.grid }, ticks: { color: colors.text } },
+                        x: { grid: { display: false }, ticks: { color: colors.text } }
+                    },
+                    plugins: { legend: { labels: { color: colors.text } } }
+                }
+            });
+        }
+
+        function updateCharts() {
+            const colors = getChartColors();
+            [barChart, lineChart].forEach(c => {
+                c.options.scales.y.grid.color = colors.grid;
+                c.options.scales.y.ticks.color = colors.text;
+                c.options.scales.x.ticks.color = colors.text;
+                c.options.plugins.legend.labels.color = colors.text;
+                c.update();
+            });
+        }
+
+        initCharts();
+    </script>
+</body>
+</html>
