@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+
+<html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Global Executive Intelligence | American Dream Fl LLC</title> <script src="https://cdn.tailwindcss.com"></script> <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"> <style> :root { --bg-dark: #030712; --bg-light: #f9fafb; --sidebar-dark: #0f172a; --sidebar-light: #ffffff; } body { font-family: 'Plus Jakarta Sans', sans-serif; transition: background-color 0.3s, color 0.3s; } .dark { background-color: var(--bg-dark); color: #f3f4f6; } .light { background-color: var(--bg-light); color: #111827; } .glass { backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); } .dark .glass { background: rgba(17, 24, 39, 0.7); } .light .glass { background: rgba(255, 255, 255, 0.8); border: 1px solid rgba(0, 0, 0, 0.05); } .sidebar { width: 280px; height: 100vh; position: fixed; left: 0; top: 0; border-right: 1px solid rgba(255, 255, 255, 0.1); z-index: 50; } .dark .sidebar { background: #0b0f1a; } .light .sidebar { background: #ffffff; border-right: 1px solid #e5e7eb; } .main-content { margin-left: 280px; min-height: 100vh; padding: 2.5rem; } .nav-item { padding: 0.75rem 1rem; margin: 0.25rem 1rem; border-radius: 0.5rem; cursor: pointer; transition: all 0.2s; font-size: 0.875rem; font-weight: 500; } .dark .nav-item:hover { background: rgba(255, 255, 255, 0.05); } .light .nav-item:hover { background: rgba(0, 0, 0, 0.05); } .active-nav { background: #3b82f6 !important; color: white !important; } .page { display: none; } .page.active { display: block; animation: fadeIn 0.4s ease-out; } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } } #theme-toggle { width: 44px; height: 24px; border-radius: 12px; position: relative; background: #374151; cursor: pointer; transition: background 0.3s; } .toggle-dot { width: 18px; height: 18px; background: white; border-radius: 50%; position: absolute; top: 3px; left: 3px; transition: transform 0.3s; } .light #theme-toggle { background: #d1d5db; } .light .toggle-dot { transform: translateX(20px); background: #3b82f6; } </style> </head> <body class="dark">
+
+<aside class="sidebar flex flex-col">
+    <div class="p-6">
+        <img src="https://drive.google.com/thumbnail?id=1uP-fp7HbzpHUK473hJdO6zD2r9mfGac1&sz=w300" 
+             alt="GNO Partners" 
+             class="max-w-[160px] object-contain mb-6">
+        
+        <div class="flex items-center space-x-3 mb-8 px-2">
+            <div id="theme-toggle" onclick="toggleTheme()">
+                <div class="toggle-dot"></div>
+            </div>
+            <span class="text-xs font-bold uppercase tracking-wider opacity-60">Theme Mode</span>
+        </div>
+    </div>
+
+    <nav class="flex-1 overflow-y-auto">
+        <div class="nav-item active-nav" onclick="showPage('summary')">Executive Summary</div>
+        <div class="nav-item" onclick="showPage('adstack')">Ad Stack Efficiency</div>
+        <div class="nav-item" onclick="showPage('recovery')">Financial Recovery</div>
+        <div class="nav-item" onclick="showPage('growth')">Growth Roadmap</div>
+        
+        <div class="mt-8 px-6 mb-2">
+            <span class="text-[10px] font-bold uppercase tracking-[0.2em] opacity-40">Marketplaces</span>
+        </div>
+        <div class="nav-item" onclick="showPage('usa-deep-dive')">USA Deep-Dive</div>
+    </nav>
+
+    <div class="p-6 border-t border-white/5 mt-auto">
+        <p class="text-[10px] opacity-40">BRAND: American Dream Fl LLC</p>
+    </div>
+</aside>
+
+<main class="main-content">
+    
+    <section id="summary" class="page active">
+        <header class="mb-10">
+            <h1 class="text-4xl font-bold tracking-tight">Executive Summary</h1>
+            <p class="opacity-60 mt-2">Core performance metrics for American Dream Fl LLC</p>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            <div class="glass p-8 rounded-2xl">
+                <p class="text-sm font-medium opacity-60 mb-1">Annual Revenue</p>
+                <h2 class="text-3xl font-bold text-blue-500">$960</h2>
+            </div>
+            <div class="glass p-8 rounded-2xl">
+                <p class="text-sm font-medium opacity-60 mb-1">Parent ASIN Count</p>
+                <h2 class="text-3xl font-bold">1</h2>
+            </div>
+            <div class="glass p-8 rounded-2xl">
+                <p class="text-sm font-medium opacity-60 mb-1">Recoverable Savings</p>
+                <h2 class="text-3xl font-bold text-emerald-500">$0.00</h2>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div class="glass p-8 rounded-2xl">
+                <h3 class="text-xl font-bold mb-6">Efficiency Overview</h3>
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center py-2 border-b border-white/5">
+                        <span class="opacity-60">Unharvested Keywords</span>
+                        <span class="font-mono">null</span>
+                    </div>
+                    <div class="flex justify-between items-center py-2 border-b border-white/5">
+                        <span class="opacity-60">Agency Satisfaction Score</span>
+                        <span class="font-mono">null</span>
+                    </div>
+                    <div class="flex justify-between items-center py-2">
+                        <span class="opacity-60">Agency Annual Cost</span>
+                        <span class="font-mono">null</span>
+                    </div>
+                </div>
+            </div>
+            <div class="glass p-8 rounded-2xl">
+                <canvas id="organicPotentialChart" height="200"></canvas>
+            </div>
+        </div>
+    </section>
+
+    <section id="adstack" class="page">
+        <header class="mb-10">
+            <h1 class="text-4xl font-bold tracking-tight">Ad Stack Efficiency</h1>
+            <p class="opacity-60 mt-2">Analysis of PPC reliance and spend health</p>
+        </header>
+        
+        <div class="glass p-8 rounded-2xl mb-6">
+            <div class="h-[400px]">
+                <canvas id="ppcRelianceChart"></canvas>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="glass p-8 rounded-2xl">
+                <h3 class="text-lg font-bold mb-4">PPC vs Organic Split</h3>
+                <div class="flex items-center space-x-4">
+                    <div class="w-full bg-white/5 rounded-full h-4 overflow-hidden flex">
+                        <div class="h-full bg-blue-500" style="width: 0%"></div>
+                        <div class="h-full bg-emerald-500" style="width: 100%"></div>
+                    </div>
+                </div>
+                <div class="flex justify-between mt-4 text-xs font-bold">
+                    <span class="text-blue-500">PPC: 0%</span>
+                    <span class="text-emerald-500">ORGANIC: 100%</span>
+                </div>
+            </div>
+            <div class="glass p-8 rounded-2xl">
+                <h3 class="text-lg font-bold mb-4">Spend Targeting Health</h3>
+                <p class="text-sm opacity-60 mb-4">Insights into TOS vs ASIN targeting distribution</p>
+                <div class="space-y-2">
+                    <div class="flex justify-between text-sm italic">
+                        <span>ASIN Targeting: null</span>
+                        <span>TOS Placement: null</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="recovery" class="page">
+        <header class="mb-10">
+            <h1 class="text-4xl font-bold tracking-tight">Financial Recovery</h1>
+            <p class="opacity-60 mt-2">Identified leaks and cash flow optimization opportunities</p>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div class="glass p-8 rounded-2xl">
+                <h3 class="text-lg font-bold mb-6">Leakage Audit</h3>
+                <div class="space-y-4">
+                    <div class="flex justify-between">
+                        <span class="opacity-60">VAT Recovery</span>
+                        <span class="font-mono text-red-400">null</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="opacity-60">Cashback Recovery</span>
+                        <span class="font-mono text-red-400">null</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="opacity-60">Agency Savings</span>
+                        <span class="font-mono text-red-400">null</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="opacity-60">Shipment Recovery (USA)</span>
+                        <span class="font-mono text-red-400">null</span>
+                    </div>
+                </div>
+            </div>
+            <div class="glass p-8 rounded-2xl">
+                <h3 class="text-lg font-bold mb-6">Cash Flow Opportunities</h3>
+                <ul class="space-y-4">
+                    <li class="flex items-start space-x-3">
+                        <div class="mt-1.5 w-2 h-2 rounded-full bg-emerald-500"></div>
+                        <span class="text-sm">Freight Forwarder Credit Terms: 60-day credit terms</span>
+                    </li>
+                    <li class="flex items-start space-x-3">
+                        <div class="mt-1.5 w-2 h-2 rounded-full bg-emerald-500"></div>
+                        <span class="text-sm">Suppliers' Payment Terms: Negotiate improved payment terms</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="growth" class="page">
+        <header class="mb-10">
+            <h1 class="text-4xl font-bold tracking-tight">Growth Roadmap</h1>
+            <p class="opacity-60 mt-2">Strategic actions to scale American Dream Fl LLC</p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div class="lg:col-span-2 glass p-8 rounded-2xl">
+                <h3 class="text-xl font-bold mb-6">Core Expansion Tactics</h3>
+                <div class="space-y-6">
+                    <div class="p-4 rounded-xl bg-white/5">
+                        <p class="text-xs font-bold uppercase text-blue-400 mb-2">Logistics & Operations</p>
+                        <p class="text-sm">Focusing on shifting from FBM to FBA</p>
+                    </div>
+                    <div class="p-4 rounded-xl bg-white/5">
+                        <p class="text-xs font-bold uppercase text-blue-400 mb-2">Creative & SEO</p>
+                        <ul class="text-sm space-y-2">
+                            <li>• Redo the main image for high CTR</li>
+                            <li>• Add high-quality secondary images with infographics</li>
+                            <li>• Add A+ content</li>
+                        </ul>
+                    </div>
+                    <div class="p-4 rounded-xl bg-white/5">
+                        <p class="text-xs font-bold uppercase text-blue-400 mb-2">PPC & Scaling</p>
+                        <ul class="text-sm space-y-2">
+                            <li>• Launch easy-win PPC campaigns and Creator Connections</li>
+                            <li>• Define PPC Budget & Perform Keyword Research</li>
+                            <li>• Transition to GNO Partners' PPC Management System</li>
+                            <li>• Recruit & Train a VA (80% automation)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="glass p-8 rounded-2xl">
+                <h3 class="text-xl font-bold mb-6">ASIN Health</h3>
+                <div class="mb-8">
+                    <p class="text-xs font-bold uppercase opacity-40 mb-4 tracking-wider">Underperforming</p>
+                    <div class="px-4 py-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 text-sm">
+                        1 parent ASINs
+                    </div>
+                </div>
+                <div>
+                    <p class="text-xs font-bold uppercase opacity-40 mb-4 tracking-wider">Relaunch Ready</p>
+                    <p class="text-xs italic opacity-40">None specified</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="usa-deep-dive" class="page">
+        <header class="mb-10">
+            <h1 class="text-4xl font-bold tracking-tight">USA Deep-Dive</h1>
+            <p class="opacity-60 mt-2">Detailed marketplace audit for United States</p>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div class="glass p-8 rounded-2xl">
+                <h3 class="text-lg font-bold mb-6">Key Statistics</h3>
+                <div class="space-y-4">
+                    <div class="flex justify-between">
+                        <span class="opacity-60">Unharvested Keywords</span>
+                        <span class="font-mono">null</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="opacity-60">Spend Dilution</span>
+                        <span class="font-mono">null</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="opacity-60">ASIN Targeting Spend</span>
+                        <span class="font-mono">null</span>
+                    </div>
+                </div>
+            </div>
+            <div class="glass p-8 rounded-2xl">
+                <h3 class="text-lg font-bold mb-4">Traffic Performance</h3>
+                <div class="flex items-center justify-between p-4 bg-white/5 rounded-xl mb-4">
+                    <span class="text-sm opacity-60">PPC Reliance</span>
+                    <span class="text-xl font-bold">0%</span>
+                </div>
+                <div class="flex items-center justify-between p-4 bg-white/5 rounded-xl">
+                    <span class="text-sm opacity-60">Organic Share</span>
+                    <span class="text-xl font-bold">100%</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass p-8 rounded-2xl">
+            <h3 class="text-lg font-bold mb-6">Verbatim Inefficiencies</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="p-4 rounded-xl bg-red-500/5 border border-red-500/10 text-sm">Not doing any PPC</div>
+                <div class="p-4 rounded-xl bg-red-500/5 border border-red-500/10 text-sm">Main image, secondary images, and A+ content are significantly under-optimized</div>
+                <div class="p-4 rounded-xl bg-red-500/5 border border-red-500/10 text-sm">Currently, only $0 is spent on PPC</div>
+                <div class="p-4 rounded-xl bg-red-500/5 border border-red-500/10 text-sm">The main image does not show card samples or clearly highlight key card-game keywords</div>
+                <div class="p-4 rounded-xl bg-red-500/5 border border-red-500/10 text-sm">Secondary images have no infographics</div>
+                <div class="p-4 rounded-xl bg-red-500/5 border border-red-500/10 text-sm">No A+ content</div>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<script>
+    // Theme Persistence Logic
+    function toggleTheme() {
+        const body = document.body;
+        body.classList.toggle('dark');
+        body.classList.toggle('light');
+        const theme = body.classList.contains('dark') ? 'dark' : 'light';
+        localStorage.setItem('dashboard-theme', theme);
+        updateCharts(theme);
+    }
+
+    function initTheme() {
+        const savedTheme = localStorage.getItem('dashboard-theme') || 'dark';
+        document.body.className = savedTheme;
+        updateCharts(savedTheme);
+    }
+
+    // Navigation Logic
+    function showPage(pageId) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(pageId).classList.add('active');
+        
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.classList.remove('active-nav');
+            if(item.innerText.toLowerCase().includes(pageId.replace('-deep-dive', '')) || 
+               (pageId === 'summary' && item.innerText === 'Executive Summary')) {
+                item.classList.add('active-nav');
+            }
+        });
+    }
+
+    // Charts Initialization
+    let ppcChart, organicChart;
+
+    function updateCharts(theme) {
+        const textColor = theme === 'dark' ? '#9ca3af' : '#4b5563';
+        const gridColor = theme === 'dark' ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
+
+        if (ppcChart) ppcChart.destroy();
+        if (organicChart) organicChart.destroy();
+
+        const ctx1 = document.getElementById('ppcRelianceChart').getContext('2d');
+        ppcChart = new Chart(ctx1, {
+            type: 'bar',
+            data: {
+                labels: ['USA'],
+                datasets: [{
+                    label: 'PPC Reliance %',
+                    data: [0],
+                    backgroundColor: '#3b82f6',
+                    borderRadius: 8
+                }, {
+                    label: 'Spend Dilution %',
+                    data: [0],
+                    backgroundColor: '#ef4444',
+                    borderRadius: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { 
+                    legend: { labels: { color: textColor, font: { family: 'Plus Jakarta Sans' } } },
+                    title: { display: true, text: 'PPC Reliance vs Spend Dilution', color: textColor, font: { size: 16 } }
+                },
+                scales: {
+                    y: { grid: { color: gridColor }, ticks: { color: textColor } },
+                    x: { grid: { display: false }, ticks: { color: textColor } }
+                }
+            }
+        });
+
+        const ctx2 = document.getElementById('organicPotentialChart').getContext('2d');
+        organicChart = new Chart(ctx2, {
+            type: 'line',
+            data: {
+                labels: ['Current', 'Phase 1', 'Phase 2', 'Target'],
+                datasets: [{
+                    label: 'Organic Ranking Potential (Indicative)',
+                    data: [10, 35, 65, 95],
+                    borderColor: '#10b981',
+                    backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                plugins: { 
+                    legend: { labels: { color: textColor } },
+                    title: { display: true, text: 'Organic Ranking Potential', color: textColor }
+                },
+                scales: {
+                    y: { grid: { color: gridColor }, ticks: { display: false } },
+                    x: { grid: { display: false }, ticks: { color: textColor } }
+                }
+            }
+        });
+    }
+
+    window.onload = initTheme;
+</script>
+</body> </html>
