@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Executive Intelligence</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #030712;
+            --card-dark: rgba(17, 24, 39, 0.7);
+            --bg-light: #f8fafc;
+            --card-light: rgba(255, 255, 255, 0.9);
+        }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; transition: all 0.3s ease; }
+        .glass { backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .dark-mode { background-color: var(--bg-dark); color: #f3f4f6; }
+        .light-mode { background-color: var(--bg-light); color: #1e293b; }
+        .sidebar { width: 280px; height: 100vh; position: fixed; border-right: 1px solid rgba(128,128,128,0.2); }
+        .main { margin-left: 280px; min-height: 100vh; padding: 40px; }
+        .nav-link { cursor: pointer; transition: 0.2s; padding: 12px 16px; border-radius: 12px; margin-bottom: 4px; display: block; }
+        .active-nav { background: #3b82f6 !important; color: white !important; font-weight: 600; }
+        .stat-card { border-radius: 24px; padding: 24px; transition: transform 0.2s; }
+        .stat-card:hover { transform: translateY(-4px); }
+        .hidden { display: none; }
+    </style>
+</head>
+<body class="dark-mode">
+
+    <aside class="sidebar p-8 flex flex-col glass">
+        <img src="https://drive.google.com/thumbnail?id=1uP-fp7HbzpHUK473hJdO6zD2r9mfGac1&sz=w300"
+             alt="GNO Partners"
+             class="max-w-[160px] object-contain mb-6">
+
+        <button id="themeToggle" class="mb-8 flex items-center justify-center gap-3 w-full py-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition">
+            <span id="themeIcon">🌙</span>
+            <span class="text-sm font-semibold">Switch Theme</span>
+        </button>
+
+        <nav class="flex-1 space-y-1">
+            <a onclick="navigate('exec')" id="nav-exec" class="nav-link active-nav">Executive Summary</a>
+            <a onclick="navigate('ads')" id="nav-ads" class="nav-link">Ad Stack Efficiency</a>
+            <a onclick="navigate('finance')" id="nav-finance" class="nav-link">Financial Recovery</a>
+            <a onclick="navigate('growth')" id="nav-growth" class="nav-link">Growth Roadmap</a>
+            <div class="mt-8 mb-2 px-4 text-[10px] font-bold uppercase tracking-widest opacity-40">Marketplaces</div>
+            <a onclick="navigate('usa')" id="nav-usa" class="nav-link">USA Deep-Dive</a>
+        </nav>
+    </aside>
+
+    <main class="main">
+        <section id="page-exec">
+            <div class="flex justify-between items-end mb-10">
+                <div>
+                    <h1 class="text-4xl font-extrabold tracking-tight">Executive Intelligence</h1>
+                    <p class="mt-2 opacity-50 font-medium">Brand: Kern Lake - Doug Burley</p>
+                </div>
+                <div class="text-right">
+                    <span class="px-4 py-1.5 rounded-full bg-green-500/10 text-green-500 text-xs font-bold uppercase tracking-wider border border-green-500/20">Active Analysis</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+                <div class="stat-card glass bg-white/5">
+                    <p class="text-xs font-bold opacity-40 uppercase mb-2">Annual Revenue</p>
+                    <h2 class="text-3xl font-bold">$321,732</h2>
+                    <p class="text-[10px] mt-2 text-blue-400 font-bold">100% Amazon Attribution</p>
+                </div>
+                <div class="stat-card glass bg-white/5">
+                    <p class="text-xs font-bold opacity-40 uppercase mb-2">Parent ASINs</p>
+                    <h2 class="text-3xl font-bold">30</h2>
+                    <p class="text-[10px] mt-2 opacity-40">Active Catalog</p>
+                </div>
+                <div class="stat-card glass bg-white/5">
+                    <p class="text-xs font-bold opacity-40 uppercase mb-2">Employees</p>
+                    <h2 class="text-3xl font-bold">0</h2>
+                    <p class="text-[10px] mt-2 text-orange-400 font-bold">In-House Management</p>
+                </div>
+                <div class="stat-card glass bg-white/5 border-l-4 border-green-500">
+                    <p class="text-xs font-bold opacity-40 uppercase mb-2">Cashback Potential</p>
+                    <h2 class="text-3xl font-bold text-green-400">$1.3K+</h2>
+                    <p class="text-[10px] mt-2 opacity-40">Via Amex Gold Transition</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="glass p-8 rounded-[32px] bg-white/5">
+                    <h3 class="text-xl font-bold mb-6">Organic vs. PPC Balance</h3>
+                    <div class="h-[300px]"><canvas id="execChart"></canvas></div>
+                </div>
+                <div class="glass p-8 rounded-[32px] bg-white/5">
+                    <h3 class="text-xl font-bold mb-6">Global Presence</h3>
+                    <table class="w-full text-sm">
+                        <thead><tr class="text-left opacity-40 border-b border-white/10"><th class="pb-4">Market</th><th class="pb-4">Status</th><th class="pb-4">PPC Adoption</th></tr></thead>
+                        <tbody class="divide-y divide-white/5">
+                            <tr><td class="py-4 font-semibold">USA</td><td>Active</td><td class="text-red-400 font-bold">0%</td></tr>
+                            <tr><td class="py-4 font-semibold">Canada</td><td>Active</td><td class="text-red-400 font-bold">0%</td></tr>
+                            <tr><td class="py-4 font-semibold">Mexico</td><td>Active</td><td class="text-red-400 font-bold">0%</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="page-ads" class="hidden">
+            <h1 class="text-4xl font-extrabold mb-10">Ad Stack Efficiency</h1>
+            <div class="glass p-8 rounded-[32px] bg-white/5 mb-8">
+                <h3 class="text-xl font-bold mb-8">Reliance vs Spend Dilution</h3>
+                <div class="h-[400px]"><canvas id="adsChart"></canvas></div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="glass p-8 rounded-[32px] bg-red-500/5 border-red-500/20">
+                    <h4 class="font-bold text-red-400 mb-2">Critical Performance Gap</h4>
+                    <p class="text-sm leading-relaxed opacity-70">"Currently, $0 is spent on PPC, highlighting a critical gap in driving growth. Across 500+ analyses, almost no brand achieves significant scale without effective PPC."</p>
+                </div>
+                <div class="glass p-8 rounded-[32px] bg-white/5">
+                    <h4 class="font-bold mb-4 text-blue-400">PPC Transition Goals</h4>
+                    <ul class="text-sm space-y-3 opacity-70">
+                        <li class="flex items-center gap-2"><span>•</span> Define realistic daily budget</li>
+                        <li class="flex items-center gap-2"><span>•</span> Identify high-converting keyword opportunities</li>
+                        <li class="flex items-center gap-2"><span>•</span> Create campaigns focused on converting targets</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="page-finance" class="hidden">
+            <h1 class="text-4xl font-extrabold mb-10">Financial Recovery</h1>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="glass p-8 rounded-[32px] bg-white/5 border-t-4 border-green-500">
+                    <h4 class="text-xs font-bold opacity-40 uppercase mb-4">Cashback Recovery</h4>
+                    <h2 class="text-4xl font-bold mb-2">$1,300+</h2>
+                    <p class="text-xs opacity-60">Estimated annual recovery from switching to Amex Gold for PPC spend.</p>
+                </div>
+                <div class="glass p-8 rounded-[32px] bg-white/5">
+                    <h4 class="text-xs font-bold opacity-40 uppercase mb-4">VAT Recovery</h4>
+                    <h2 class="text-4xl font-bold mb-2 text-gray-500">N/A</h2>
+                    <p class="text-xs opacity-60">No recoverable VAT data identified in current summary.</p>
+                </div>
+                <div class="glass p-8 rounded-[32px] bg-white/5">
+                    <h4 class="text-xs font-bold opacity-40 uppercase mb-4">Agency Savings</h4>
+                    <h2 class="text-4xl font-bold mb-2 text-gray-500">N/A</h2>
+                    <p class="text-xs opacity-60">Currently managed in-house (0 employees).</p>
+                </div>
+            </div>
+            <div class="mt-8 glass p-8 rounded-[32px] bg-blue-500/5 border-blue-500/20">
+                <h4 class="font-bold text-blue-400 mb-4">Billing Threshold Optimization</h4>
+                <p class="text-lg font-medium italic">"Increase billing thresholds from smaller increments (e.g., $500) to $10K"</p>
+            </div>
+        </section>
+
+        <section id="page-growth" class="hidden">
+            <h1 class="text-4xl font-extrabold mb-10">Growth Roadmap</h1>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="space-y-6">
+                    <div class="glass p-8 rounded-[32px] bg-white/5">
+                        <h4 class="font-bold text-blue-400 mb-6 flex items-center gap-3">
+                            <span class="p-2 rounded-lg bg-blue-400/10 italic">OP1</span> Asset Optimization
+                        </h4>
+                        <div class="space-y-4 text-sm opacity-80">
+                            <div class="p-4 rounded-2xl bg-white/5 border border-white/10">
+                                <span class="font-bold block mb-1">Main Image Audit</span>
+                                All ASINs lack high-quality visual with clear box presentation. Improvement potential is "solid".
+                            </div>
+                            <div class="p-4 rounded-2xl bg-white/5 border border-white/10">
+                                <span class="font-bold block mb-1">Variation Reviews</span>
+                                Merge reviews across variations for ASINs 5 and 8 to restore full visibility.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="space-y-6">
+                    <div class="glass p-8 rounded-[32px] bg-white/5">
+                        <h4 class="font-bold text-purple-400 mb-6 flex items-center gap-3">
+                            <span class="p-2 rounded-lg bg-purple-400/10 italic">OP2</span> Relaunch Strategy
+                        </h4>
+                        <p class="text-sm opacity-60 mb-6">Targeting ASINs 1, 2, 3, 4, 5, 6, 7, 9, 11, and 13 via DataDive insights.</p>
+                        <div class="p-6 rounded-2xl bg-purple-400/5 border border-purple-400/20">
+                            <span class="font-bold block text-purple-400 mb-2">Primary Goal</span>
+                            Increase market share by improving organic ranking for large keywords where current visibility is minimal.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="page-usa" class="hidden">
+            <h1 class="text-4xl font-extrabold mb-4">USA Deep-Dive</h1>
+            <p class="opacity-50 mb-10 font-medium">Regional conversion and efficiency audit</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                <div class="glass p-8 rounded-[32px] bg-white/5">
+                    <h4 class="font-bold mb-6">Key Marketplace Inefficiencies</h4>
+                    <ul class="space-y-4">
+                        <li class="p-4 rounded-2xl bg-red-500/5 border border-red-500/10 text-xs leading-relaxed">"Delivery speed insight (USA): Same Day + Tomorrow delivery represents 8% of locations."</li>
+                        <li class="p-4 rounded-2xl bg-red-500/5 border border-red-500/10 text-xs leading-relaxed">"ASIN 13 listing is currently rated at 4.2 stars."</li>
+                        <li class="p-4 rounded-2xl bg-red-500/5 border border-red-500/10 text-xs leading-relaxed">"Reviews are not synced across variations for ASINs 5 and 8."</li>
+                    </ul>
+                </div>
+                <div class="glass p-8 rounded-[32px] bg-white/5">
+                    <h4 class="font-bold mb-6">Marketplace Breakdown</h4>
+                    <div class="space-y-6">
+                        <div>
+                            <div class="flex justify-between text-xs font-bold mb-2"><span>ORGANIC SALES</span><span>100%</span></div>
+                            <div class="w-full h-2 bg-white/10 rounded-full overflow-hidden"><div class="h-full bg-blue-500" style="width: 100%"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs font-bold mb-2"><span>PPC REVENUE</span><span>0%</span></div>
+                            <div class="w-full h-2 bg-white/10 rounded-full overflow-hidden"><div class="h-full bg-red-500" style="width: 0%"></div></div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs font-bold mb-2"><span>LOGISTICS COVERAGE (CA/NY)</span><span>8%</span></div>
+                            <div class="w-full h-2 bg-white/10 rounded-full overflow-hidden"><div class="h-full bg-orange-500" style="width: 8%"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const pages = ['exec', 'ads', 'finance', 'growth', 'usa'];
+        const charts = {};
+
+        function navigate(id) {
+            pages.forEach(p => {
+                document.getElementById('page-' + p).classList.add('hidden');
+                document.getElementById('nav-' + p).classList.remove('active-nav');
+            });
+            document.getElementById('page-' + id).classList.remove('hidden');
+            document.getElementById('nav-' + id).classList.add('active-nav');
+        }
+
+        const themeToggle = document.getElementById('themeToggle');
+        themeToggle.addEventListener('click', () => {
+            const isDark = document.body.classList.toggle('dark-mode');
+            document.body.classList.toggle('light-mode');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            updateCharts(isDark);
+        });
+
+        function updateCharts(isDark) {
+            const color = isDark ? '#ffffff' : '#1e293b';
+            const gridColor = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
+            
+            Object.values(charts).forEach(chart => {
+                chart.options.plugins.legend.labels.color = color;
+                chart.options.scales.x.ticks.color = color;
+                chart.options.scales.y.ticks.color = color;
+                chart.options.scales.x.grid.color = gridColor;
+                chart.options.scales.y.grid.color = gridColor;
+                chart.update();
+            });
+        }
+
+        function initCharts() {
+            const ctx1 = document.getElementById('execChart').getContext('2d');
+            charts.exec = new Chart(ctx1, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Organic Visibility (Indicative)',
+                        data: [65, 59, 80, 81, 56, 55],
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#fff' } } }, scales: { x: { ticks: { color: '#fff' } }, y: { ticks: { color: '#fff' } } } }
+            });
+
+            const ctx2 = document.getElementById('adsChart').getContext('2d');
+            charts.ads = new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: ['USA', 'Canada', 'Mexico'],
+                    datasets: [
+                        { label: 'PPC Reliance %', data: [0, 0, 0], backgroundColor: '#3b82f6' },
+                        { label: 'Spend Dilution %', data: [0, 0, 0], backgroundColor: '#ef4444' }
+                    ]
+                },
+                options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 100, ticks: { color: '#fff' } }, x: { ticks: { color: '#fff' } } } }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            if (localStorage.getItem('theme') === 'light') {
+                document.body.classList.remove('dark-mode');
+                document.body.classList.add('light-mode');
+            }
+            initCharts();
+            updateCharts(!document.body.classList.contains('light-mode'));
+        });
+    </script>
+</body>
+</html>
