@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Executive Intelligence</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #030712;
+            --sidebar-bg: #111827;
+            --card-bg: rgba(31, 41, 55, 0.5);
+            --text-primary: #f9fafb;
+            --text-secondary: #9ca3af;
+            --accent: #6366f1;
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        .light-mode {
+            --bg-primary: #f3f4f6;
+            --sidebar-bg: #ffffff;
+            --card-bg: rgba(255, 255, 255, 0.8);
+            --text-primary: #111827;
+            --text-secondary: #4b5563;
+            --accent: #4f46e5;
+            --border: rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            margin: 0;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .glass {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: var(--sidebar-bg);
+            border-right: 1px solid var(--border);
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            padding: 2rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            z-index: 50;
+        }
+
+        .main-content {
+            margin-left: 280px;
+            padding: 2.5rem;
+            width: calc(100% - 280px);
+        }
+
+        .nav-item {
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 0.25rem;
+            font-weight: 500;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: var(--accent);
+            color: white;
+        }
+
+        .stat-card {
+            padding: 1.5rem;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .toggle-btn {
+            background: var(--border);
+            border: 1px solid var(--border);
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .tag {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.6rem;
+            border-radius: 9999px;
+            background: rgba(99, 102, 241, 0.15);
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
+    </style>
+</head>
+<body class="dark-mode">
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <img src="https://drive.google.com/thumbnail?id=1uP-fp7HbzpHUK473hJdO6zD2r9mfGac1&sz=w300"
+             alt="GNO Partners"
+             class="max-w-[160px] object-contain mb-6">
+
+        <button onclick="toggleTheme()" class="toggle-btn w-full mb-6 text-sm font-semibold">
+            <span id="theme-icon" class="mr-2">🌙</span> 
+            <span id="theme-text">Dark Mode</span>
+        </button>
+
+        <nav class="space-y-1">
+            <div class="nav-item active" onclick="showPage('exec-summary')">Executive Summary</div>
+            <div class="nav-item" onclick="showPage('ad-stack')">Ad Stack Efficiency</div>
+            <div class="nav-item" onclick="showPage('financial')">Financial Recovery</div>
+            <div class="nav-item" onclick="showPage('roadmap')">Growth Roadmap</div>
+            
+            <div class="mt-6 mb-2 px-3 text-xs font-bold text-gray-500 uppercase tracking-widest">Marketplaces</div>
+            <div class="nav-item" onclick="showPage('market-usa')">USA Deep-Dive</div>
+            <div class="nav-item" onclick="showPage('market-uk')">UK Deep-Dive</div>
+            <div class="nav-item" onclick="showPage('market-germany')">Germany Deep-Dive</div>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        
+        <!-- Executive Summary -->
+        <div id="exec-summary" class="section active">
+            <h1 class="text-3xl font-extrabold mb-8">Executive Intelligence Summary</h1>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="glass stat-card">
+                    <p class="text-sm text-gray-400 font-medium mb-1 uppercase tracking-wider">Annual Revenue</p>
+                    <h2 class="text-2xl font-bold">$4,161,996</h2>
+                </div>
+                <div class="glass stat-card">
+                    <p class="text-sm text-gray-400 font-medium mb-1 uppercase tracking-wider">Agency Score</p>
+                    <h2 class="text-2xl font-bold text-red-500">2 / 10</h2>
+                </div>
+                <div class="glass stat-card">
+                    <p class="text-sm text-gray-400 font-medium mb-1 uppercase tracking-wider">Total Child ASINs</p>
+                    <h2 class="text-2xl font-bold">5 Parents</h2>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="glass p-6">
+                    <h3 class="text-lg font-bold mb-4">Core Statistics</h3>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center border-b border-white/5 pb-2">
+                            <span class="text-gray-400">Total Unharvested Keywords</span>
+                            <span class="font-bold">142</span>
+                        </div>
+                        <div class="flex justify-between items-center border-b border-white/5 pb-2">
+                            <span class="text-gray-400">Agency Monthly Cost</span>
+                            <span class="font-bold">$7,000</span>
+                        </div>
+                        <div class="flex justify-between items-center border-b border-white/5 pb-2">
+                            <span class="text-gray-400">Agency Annual Savings Potential</span>
+                            <span class="font-bold text-green-500">$84,000</span>
+                        </div>
+                        <div class="flex justify-between items-center border-b border-white/5 pb-2">
+                            <span class="text-gray-400">VAT Recovery Potential</span>
+                            <span class="font-bold text-green-500">€19.6K</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-gray-400">Cashback Recovery</span>
+                            <span class="font-bold text-green-500">$19.5K+</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass p-6">
+                    <h3 class="text-lg font-bold mb-4">Marketplace Presence</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="tag">USA</span><span class="tag">Canada</span><span class="tag">Germany</span>
+                        <span class="tag">UK</span><span class="tag">France</span><span class="tag">Spain</span>
+                        <span class="tag">Netherlands</span><span class="tag">Italy</span><span class="tag">Poland</span>
+                        <span class="tag">Sweden</span>
+                    </div>
+                    <div class="mt-8">
+                        <h4 class="text-sm font-bold text-gray-400 mb-2 uppercase tracking-wider">Top Performing ASIN</h4>
+                        <div class="p-4 bg-indigo-500/10 rounded-lg border border-indigo-500/20 text-indigo-400 font-bold">
+                            B0C7HJ1Y65
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ad Stack Efficiency -->
+        <div id="ad-stack" class="section">
+            <h1 class="text-3xl font-extrabold mb-8">Ad Stack Efficiency</h1>
+            <div class="glass p-8 mb-8">
+                <canvas id="efficiencyChart" height="100"></canvas>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="glass p-6">
+                    <h3 class="font-bold mb-2">USA Performance</h3>
+                    <p class="text-sm text-gray-400 mb-4">Highest reliance on PPC at 76%. Spend dilution is critical.</p>
+                    <div class="text-3xl font-bold text-indigo-500">89%</div>
+                    <p class="text-xs uppercase text-gray-500 mt-1">Spend Dilution</p>
+                </div>
+                <div class="glass p-6">
+                    <h3 class="font-bold mb-2">UK Performance</h3>
+                    <p class="text-sm text-gray-400 mb-4">Moderate organic health with 38% organic sales.</p>
+                    <div class="text-3xl font-bold text-indigo-500">62%</div>
+                    <p class="text-xs uppercase text-gray-500 mt-1">Spend Dilution</p>
+                </div>
+                <div class="glass p-6">
+                    <h3 class="font-bold mb-2">Germany Performance</h3>
+                    <p class="text-sm text-gray-400 mb-4">Limited TOS placement (36%) hindering growth.</p>
+                    <div class="text-3xl font-bold text-indigo-500">68%</div>
+                    <p class="text-xs uppercase text-gray-500 mt-1">Spend Dilution</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Financial Recovery -->
+        <div id="financial" class="section">
+            <h1 class="text-3xl font-extrabold mb-8">Financial Recovery Ledger</h1>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="glass p-6">
+                    <h3 class="text-xl font-bold mb-6">Recoverable Assets</h3>
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="text-gray-500 text-sm border-b border-white/10">
+                                <th class="pb-4">Type</th>
+                                <th class="pb-4">Value</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-white/5">
+                            <tr><td class="py-4">VAT Recovery</td><td class="py-4 text-green-500 font-bold">€19.6K</td></tr>
+                            <tr><td class="py-4">Credit Card Cashback</td><td class="py-4 text-green-500 font-bold">$19.5K+</td></tr>
+                            <tr><td class="py-4">Agency Optimization</td><td class="py-4 text-green-500 font-bold">$84,000</td></tr>
+                            <tr><td class="py-4">USA Shipments</td><td class="py-4">Up to $1,000</td></tr>
+                            <tr><td class="py-4">UK Shipments</td><td class="py-4">£200</td></tr>
+                            <tr><td class="py-4">DE Shipments</td><td class="py-4">€600</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="glass p-6">
+                    <h3 class="text-xl font-bold mb-4">Efficiency Gains</h3>
+                    <div class="space-y-6">
+                        <div class="p-4 bg-white/5 rounded-lg border border-white/10">
+                            <p class="text-xs uppercase text-gray-500 font-bold">Billing Threshold</p>
+                            <p class="text-lg font-bold">Increase from £1K to £10K</p>
+                            <p class="text-sm text-gray-400 mt-1">Reducing administrative overhead and improving cash flow timing.</p>
+                        </div>
+                        <div class="p-4 bg-white/5 rounded-lg border border-white/10">
+                            <p class="text-xs uppercase text-gray-500 font-bold">Inventory Recovery</p>
+                            <p class="text-lg font-bold">Sellerise Reconciliations</p>
+                            <p class="text-sm text-gray-400 mt-1">Automating missing inbound shipment claims across USA, UK, and DE.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Growth Roadmap -->
+        <div id="roadmap" class="section">
+            <h1 class="text-3xl font-extrabold mb-8">Growth Roadmap</h1>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div class="glass p-6">
+                    <h3 class="text-xl font-bold mb-4 text-indigo-400">Immediate Actions</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start text-sm"><span class="mr-2 text-indigo-500">✓</span> Run Best Day/Lightning deals for ASINs 1, 9, & 11</li>
+                        <li class="flex items-start text-sm"><span class="mr-2 text-indigo-500">✓</span> Launch quick-win campaigns for immediate sales boosts</li>
+                        <li class="flex items-start text-sm"><span class="mr-2 text-indigo-500">✓</span> Turn off budget sharing for individual spend control</li>
+                        <li class="flex items-start text-sm"><span class="mr-2 text-indigo-500">✓</span> Harvest unharvested keywords into Exact campaigns</li>
+                    </ul>
+                </div>
+                <div class="glass p-6">
+                    <h3 class="text-xl font-bold mb-4 text-indigo-400">Structural Improvements</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start text-sm"><span class="mr-2 text-indigo-500">✓</span> Complete overhaul of A+ content (Engaging images, Installation guides)</li>
+                        <li class="flex items-start text-sm"><span class="mr-2 text-indigo-500">✓</span> Add MSRP across all ASINs for strike-through pricing</li>
+                        <li class="flex items-start text-sm"><span class="mr-2 text-indigo-500">✓</span> Recruit and train a specialized Virtual Assistant (VA)</li>
+                        <li class="flex items-start text-sm"><span class="mr-2 text-indigo-500">✓</span> Implement GNO's PPC Systems and Frameworks</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="glass p-6">
+                <h3 class="text-xl font-bold mb-4">ASIN Relaunch Targets</h3>
+                <div class="flex flex-wrap gap-2">
+                    <span class="tag">ASIN 1</span> <span class="tag">ASIN 2</span> <span class="tag">ASIN 3</span>
+                    <span class="tag">ASIN 4</span> <span class="tag">ASIN 5</span> <span class="tag">ASIN 6</span>
+                    <span class="tag">ASIN 7</span> <span class="tag">ASIN 8</span> <span class="tag">ASIN 9</span>
+                    <span class="tag">ASIN 10</span> <span class="tag">ASIN 11</span> <span class="tag">ASIN 12</span>
+                    <span class="tag">ASIN 13</span> <span class="tag">ASIN 14</span> <span class="tag">ASIN 15</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- USA Deep-Dive -->
+        <div id="market-usa" class="section">
+            <h1 class="text-3xl font-extrabold mb-8">USA Deep-Dive</h1>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="glass p-6"><p class="text-xs text-gray-500 mb-1">UNHARVESTED KW</p><h2 class="text-2xl font-bold">104</h2></div>
+                <div class="glass p-6"><p class="text-xs text-gray-500 mb-1">PPC RELIANCE</p><h2 class="text-2xl font-bold">76%</h2></div>
+                <div class="glass p-6"><p class="text-xs text-gray-500 mb-1">ORGANIC SALES</p><h2 class="text-2xl font-bold">24%</h2></div>
+                <div class="glass p-6"><p class="text-xs text-gray-500 mb-1">ASIN TARGETING</p><h2 class="text-2xl font-bold">46%</h2></div>
+            </div>
+            <div class="glass p-8">
+                <h3 class="text-xl font-bold mb-6">Key Inefficiencies</h3>
+                <div class="space-y-4">
+                    <div class="p-4 bg-red-500/10 border-l-4 border-red-500">
+                        <p class="font-bold">Extreme Spend Dilution (89%)</p>
+                        <p class="text-sm text-gray-400">89% of spend is allocated to multiple variations in the same ad group, cannibalizing potential.</p>
+                    </div>
+                    <div class="p-4 bg-red-500/10 border-l-4 border-red-500">
+                        <p class="font-bold">ASIN Targeting Imbalance (46%)</p>
+                        <p class="text-sm text-gray-400">46% of budget is directed to ASIN targeting, which does not contribute to keyword ranking growth.</p>
+                    </div>
+                    <div class="p-4 bg-red-500/10 border-l-4 border-red-500">
+                        <p class="font-bold">TOS Placement Deficiency (43%)</p>
+                        <p class="text-sm text-gray-400">Top of Search spend is only 43%, despite delivering stronger CVR and lower ACOS.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- UK Deep-Dive -->
+        <div id="market-uk" class="section">
+            <h1 class="text-3xl font-extrabold mb-8">UK Deep-Dive</h1>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="glass p-6"><p class="text-xs text-gray-500 mb-1">UNHARVESTED KW</p><h2 class="text-2xl font-bold">23</h2></div>
+                <div class="glass p-6"><p class="text-xs text-gray-500 mb-1">PPC RELIANCE</p><h2 class="text-2xl font-bold">62%</h2></div>
+                <div class="glass p-6"><p class="text-xs text-gray-500 mb-1">ORGANIC SALES</p><h2 class="text-2xl font-bold">38%</h2></div>
+            </div>
+            <div class="glass p-8">
+                <h3 class="text-xl font-bold mb-6">Key Inefficiencies</h3>
+                <div class="space-y-4">
+                    <div class="p-4 bg-red-500/10 border-l-4 border-red-500">
+                        <p class="font-bold">Spend Dilution (62%)</p>
+                        <p class="text-sm text-gray-400">62% of spend is diluted across multiple variations in the same ad group.</p>
+                    </div>
+                    <div class="p-4 bg-red-500/10 border-l-4 border-red-500">
+                        <p class="font-bold">Product Page Misallocation (15%)</p>
+                        <p class="text-sm text-gray-400">15% of spend goes to Product Pages with poor ACOS and CVR performance.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Germany Deep-Dive -->
+        <div id="market-germany" class="section">
+            <h1 class="text-3xl font-extrabold mb-8">Germany Deep-Dive</h1>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="glass p-6"><p class="text-xs text-gray-500 mb-1">UNHARVESTED KW</p><h2 class="text-2xl font-bold">15</h2></div>
+                <div class="glass p-6"><p class="text-xs text-gray-500 mb-1">SPEND DILUTION</p><h2 class="text-2xl font-bold">68%</h2></div>
+                <div class="glass p-6"><p class="text-xs text-gray-500 mb-1">TOS SPEND</p><h2 class="text-2xl font-bold">36%</h2></div>
+            </div>
+            <div class="glass p-8">
+                <h3 class="text-xl font-bold mb-6">Key Inefficiencies</h3>
+                <div class="space-y-4">
+                    <div class="p-4 bg-red-500/10 border-l-4 border-red-500">
+                        <p class="font-bold">Variation Dilution (68%)</p>
+                        <p class="text-sm text-gray-400">68% of spend allocated to multiple variations in the same ad group.</p>
+                    </div>
+                    <div class="p-4 bg-red-500/10 border-l-4 border-red-500">
+                        <p class="font-bold">Keyword Ranking Stagnation (33%)</p>
+                        <p class="text-sm text-gray-400">33% of spend to ASIN targeting, which does not drive keyword ranking growth.</p>
+                    </div>
+                    <div class="p-4 bg-red-500/10 border-l-4 border-red-500">
+                        <p class="font-bold">Placement Inefficiency</p>
+                        <p class="text-sm text-gray-400">TOS spend is only 36%, limiting CVR, ACOS efficiency, and organic ranking improvements.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Navigation Logic
+        function showPage(pageId) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            
+            document.querySelectorAll('.nav-item').forEach(n => {
+                if (n.innerText.toLowerCase().includes(pageId.split('-')[1]) || 
+                   (pageId === 'exec-summary' && n.innerText === 'Executive Summary') ||
+                   (pageId === 'ad-stack' && n.innerText === 'Ad Stack Efficiency') ||
+                   (pageId === 'financial' && n.innerText === 'Financial Recovery') ||
+                   (pageId === 'roadmap' && n.innerText === 'Growth Roadmap')) {
+                    n.classList.add('active');
+                } else {
+                    n.classList.remove('active');
+                }
+            });
+        }
+
+        // Theme Logic
+        function toggleTheme() {
+            const body = document.body;
+            const icon = document.getElementById('theme-icon');
+            const text = document.getElementById('theme-text');
+            
+            if (body.classList.contains('dark-mode')) {
+                body.classList.remove('dark-mode');
+                body.classList.add('light-mode');
+                icon.innerText = '☀️';
+                text.innerText = 'Light Mode';
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.classList.remove('light-mode');
+                body.classList.add('dark-mode');
+                icon.innerText = '🌙';
+                text.innerText = 'Dark Mode';
+                localStorage.setItem('theme', 'dark');
+            }
+            updateChartTheme();
+        }
+
+        // Initialize Theme
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') {
+            document.body.classList.remove('dark-mode');
+            document.body.classList.add('light-mode');
+            document.getElementById('theme-icon').innerText = '☀️';
+            document.getElementById('theme-text').innerText = 'Light Mode';
+        }
+
+        // Chart Logic
+        let efficiencyChart;
+        function updateChartTheme() {
+            const isDark = document.body.classList.contains('dark-mode');
+            const textColor = isDark ? '#9ca3af' : '#4b5563';
+            const gridColor = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)';
+
+            const ctx = document.getElementById('efficiencyChart').getContext('2d');
+            
+            if (efficiencyChart) efficiencyChart.destroy();
+
+            efficiencyChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['USA', 'UK', 'Germany'],
+                    datasets: [
+                        {
+                            label: 'PPC Reliance (%)',
+                            data: [76, 62, 0], // DE null handled as 0
+                            backgroundColor: '#6366f1',
+                            borderRadius: 6
+                        },
+                        {
+                            label: 'Spend Dilution (%)',
+                            data: [89, 62, 68],
+                            backgroundColor: '#ec4899',
+                            borderRadius: 6
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { labels: { color: textColor, font: { family: 'Plus Jakarta Sans' } } },
+                        title: { display: true, text: 'PPC Reliance vs Spend Dilution', color: textColor, font: { size: 16 } }
+                    },
+                    scales: {
+                        y: { 
+                            beginAtZero: true, 
+                            max: 100,
+                            grid: { color: gridColor },
+                            ticks: { color: textColor }
+                        },
+                        x: { 
+                            grid: { display: false },
+                            ticks: { color: textColor }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Load Charts
+        window.onload = updateChartTheme;
+    </script>
+</body>
+</html>
