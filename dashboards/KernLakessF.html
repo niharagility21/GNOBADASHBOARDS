@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Global Executive Intelligence</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #030712;
+            --sidebar-bg: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent-primary: #3b82f6;
+        }
+
+        .light-mode {
+            --bg-main: #f8fafc;
+            --sidebar-bg: #ffffff;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --card-border: rgba(0, 0, 0, 0.1);
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --accent-primary: #2563eb;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            margin: 0;
+        }
+
+        .sidebar {
+            background-color: var(--sidebar-bg);
+            border-right: 1px solid var(--card-border);
+            width: 280px;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .main-content {
+            margin-left: 280px;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .glass-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--card-border);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            transition: transform 0.2s ease;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            margin: 0.25rem 1rem;
+            border-radius: 0.5rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: var(--accent-primary);
+            color: white;
+        }
+
+        .theme-toggle {
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+        }
+
+        .stat-value {
+            font-size: 1.875rem;
+            font-weight: 800;
+            letter-spacing: -0.025em;
+        }
+
+        .tag {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .hidden-page { display: none; }
+    </style>
+</head>
+<body class="dark-mode">
+
+    <!-- Sidebar -->
+    <div class="sidebar flex flex-col">
+        <div class="p-6">
+            <img src="https://drive.google.com/thumbnail?id=1uP-fp7HbzpHUK473hJdO6zD2r9mfGac1&sz=w300"
+                 alt="GNO Partners"
+                 class="max-w-[160px] object-contain mb-6">
+            
+            <button onclick="toggleTheme()" class="theme-toggle flex items-center justify-center mb-8 w-full gap-2 text-sm font-semibold">
+                <span id="theme-icon">🌙</span> <span id="theme-text">Dark Mode</span>
+            </button>
+        </div>
+
+        <nav class="flex-1">
+            <div class="nav-item active" onclick="showPage('executive-summary')">Executive Summary</div>
+            <div class="nav-item" onclick="showPage('ad-stack')">Ad Stack Efficiency</div>
+            <div class="nav-item" onclick="showPage('financial-recovery')">Financial Recovery</div>
+            <div class="nav-item" onclick="showPage('growth-roadmap')">Growth Roadmap</div>
+            
+            <div class="px-6 mt-8 mb-2 text-xs font-bold uppercase tracking-widest text-slate-500">Marketplaces</div>
+            <div class="nav-item" onclick="showPage('usa-deep-dive')">USA Deep-Dive</div>
+            <div class="nav-item" onclick="showPage('uk-deep-dive')">UK Deep-Dive</div>
+            <div class="nav-item" onclick="showPage('de-deep-dive')">DE Deep-Dive</div>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        
+        <!-- Executive Summary -->
+        <section id="executive-summary" class="page-section">
+            <div class="flex justify-between items-center mb-8">
+                <h1 class="text-3xl font-extrabold tracking-tight">Global Executive Intelligence</h1>
+                <div class="flex gap-4">
+                    <span class="tag bg-blue-500/20 text-blue-400">Annual Revenue: $4,161,996</span>
+                    <span class="tag bg-red-500/20 text-red-400">Agency Score: 2/10</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                <div class="glass-card">
+                    <p class="text-sm text-slate-400 mb-1">Parent ASINs</p>
+                    <p class="stat-value">5</p>
+                </div>
+                <div class="glass-card">
+                    <p class="text-sm text-slate-400 mb-1">Unharvested Keywords</p>
+                    <p class="stat-value">142</p>
+                    <p class="text-xs text-blue-400 mt-2">Across USA, UK, DE</p>
+                </div>
+                <div class="glass-card">
+                    <p class="text-sm text-slate-400 mb-1">Annual Agency Cost</p>
+                    <p class="stat-value">$84,000</p>
+                    <p class="text-xs text-red-400 mt-2">Potential Saving Target</p>
+                </div>
+                <div class="glass-card">
+                    <p class="text-sm text-slate-400 mb-1">Cashback Potential</p>
+                    <p class="stat-value">$19.5K+</p>
+                    <p class="text-xs text-green-400 mt-2">Via CC Optimization</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="glass-card">
+                    <h3 class="font-bold mb-4">Marketplace Footprint</h3>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="tag bg-slate-700">USA</span> <span class="tag bg-slate-700">Canada</span>
+                        <span class="tag bg-slate-700">Germany</span> <span class="tag bg-slate-700">UK</span>
+                        <span class="tag bg-slate-700">France</span> <span class="tag bg-slate-700">Spain</span>
+                        <span class="tag bg-slate-700">Netherlands</span> <span class="tag bg-slate-700">Italy</span>
+                        <span class="tag bg-slate-700">Poland</span> <span class="tag bg-slate-700">Sweden</span>
+                    </div>
+                </div>
+                <div class="glass-card">
+                    <h3 class="font-bold mb-4">Audit Focus ASINs</h3>
+                    <p class="text-sm text-slate-400 mb-2">Top Performer: ASIN B0C7HJ1Y65</p>
+                    <p class="text-sm text-red-400">Underperforming Variations: ASIN 4 variations</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Ad Stack Efficiency -->
+        <section id="ad-stack" class="page-section hidden-page">
+            <h2 class="text-2xl font-extrabold mb-8">Ad Stack Efficiency</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="glass-card">
+                    <h3 class="font-bold mb-4 text-slate-400">PPC Reliance vs Spend Dilution</h3>
+                    <canvas id="ppcChart" height="300"></canvas>
+                </div>
+                <div class="glass-card">
+                    <h3 class="font-bold mb-4 text-slate-400">Organic Ranking Potential (Indicative)</h3>
+                    <canvas id="organicChart" height="300"></canvas>
+                </div>
+            </div>
+            <div class="mt-8 glass-card">
+                <h3 class="font-bold mb-4">Structural Insights</h3>
+                <ul class="space-y-3 text-sm">
+                    <li class="flex items-start gap-3">
+                        <span class="text-red-500 mt-1">●</span>
+                        <span><b>Dilution Crisis:</b> 89% in USA and 68% in DE of spend is diluted across multiple variations in single ad groups.</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="text-yellow-500 mt-1">●</span>
+                        <span><b>Targeting Imbalance:</b> 46% of USA spend is trapped in ASIN targeting, failing to drive keyword rank.</span>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <span class="text-blue-500 mt-1">●</span>
+                        <span><b>Placement Opportunity:</b> Only 43% of USA spend goes to Top of Search (TOS), despite highest CVR.</span>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Financial Recovery -->
+        <section id="financial-recovery" class="page-section hidden-page">
+            <h2 class="text-2xl font-extrabold mb-8">Financial Recovery Center</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="glass-card border-l-4 border-green-500">
+                    <h3 class="font-bold mb-4 text-slate-400 uppercase text-xs">Direct Recovery</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <p class="text-sm">Shipment Reconciliation</p>
+                            <p class="text-xl font-bold">USA: $1K | UK: £0.2K | DE: €0.6K</p>
+                        </div>
+                        <div>
+                            <p class="text-sm">VAT Recovery</p>
+                            <p class="text-xl font-bold">€19.6K (Estimated)</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-card border-l-4 border-blue-500">
+                    <h3 class="font-bold mb-4 text-slate-400 uppercase text-xs">Operational Savings</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <p class="text-sm">Annual Agency Replacement</p>
+                            <p class="text-xl font-bold">$84,000</p>
+                        </div>
+                        <div>
+                            <p class="text-sm">Billing Threshold Optimization</p>
+                            <p class="text-xl font-bold">£1K → £10K Threshold</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Growth Roadmap -->
+        <section id="growth-roadmap" class="page-section hidden-page">
+            <h2 class="text-2xl font-extrabold mb-8">Growth Strategy Roadmap</h2>
+            <div class="glass-card">
+                <div class="space-y-6">
+                    <div class="border-b border-slate-700 pb-4">
+                        <h4 class="font-bold text-blue-400 mb-2">Phase 1: Immediate Financial & PPC Wins</h4>
+                        <ul class="list-disc pl-5 text-sm space-y-2 text-slate-300">
+                            <li>Implement Credit Card (Amex Gold) for PPC to generate $19.5K+ annual cashback.</li>
+                            <li>Harvest 142 identified high-CVR, low-ACOS keywords into Exact campaigns.</li>
+                            <li>Turn off budget sharing for granular campaign control.</li>
+                            <li>Increase Top of Search (TOS) placement modifiers to boost organic ranking.</li>
+                        </ul>
+                    </div>
+                    <div class="border-b border-slate-700 pb-4">
+                        <h4 class="font-bold text-blue-400 mb-2">Phase 2: Conversion & Catalog Optimization</h4>
+                        <ul class="list-disc pl-5 text-sm space-y-2 text-slate-300">
+                            <li>Execute Deals/Lightning Deals for ASINs 1, 9, & 11.</li>
+                            <li>Add MSRP strike-through pricing across the catalog.</li>
+                            <li>Comprehensive A+ Content overhaul: high-weight fonts, measurements, and installation guides.</li>
+                            <li>Relaunch sequence for 15 identified ASINs.</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-blue-400 mb-2">Phase 3: Scaling & Operations</h4>
+                        <ul class="list-disc pl-5 text-sm space-y-2 text-slate-300">
+                            <li>Migrate to GNO-recommended freight forwarders (60-day credit terms).</li>
+                            <li>Recruit and train a dedicated VA via GNO system for 80% of technical tasks.</li>
+                            <li>Scale billing thresholds from £1K to £10K to improve cash velocity.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- USA Deep Dive -->
+        <section id="usa-deep-dive" class="page-section hidden-page">
+            <h2 class="text-2xl font-extrabold mb-8">USA Deep-Dive</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                <div class="glass-card">
+                    <p class="text-sm text-slate-400">Unharvested KWs</p>
+                    <p class="text-2xl font-bold">104</p>
+                </div>
+                <div class="glass-card">
+                    <p class="text-sm text-slate-400">PPC Reliance</p>
+                    <p class="text-2xl font-bold text-red-400">76%</p>
+                </div>
+                <div class="glass-card">
+                    <p class="text-sm text-slate-400">Spend Dilution</p>
+                    <p class="text-2xl font-bold text-red-400">89%</p>
+                </div>
+            </div>
+            <div class="glass-card">
+                <h3 class="font-bold mb-4">Market Inefficiencies</h3>
+                <ul class="space-y-4 text-sm">
+                    <li class="bg-black/20 p-3 rounded">104 high-CVR, low-ACOS non-branded KWs remain unharvested</li>
+                    <li class="bg-black/20 p-3 rounded">76% of sales come from PPC (only 24% organic), showing a weak organic ranking</li>
+                    <li class="bg-black/20 p-3 rounded">Spend is heavily diluted, with 89% allocated to multiple variations in the same ad group and 46% going to ASIN targeting</li>
+                    <li class="bg-black/20 p-3 rounded">TOS spend is only 43%, despite delivering stronger CVR and lower ACOS</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- UK Deep Dive -->
+        <section id="uk-deep-dive" class="page-section hidden-page">
+            <h2 class="text-2xl font-extrabold mb-8">UK Deep-Dive</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                <div class="glass-card">
+                    <p class="text-sm text-slate-400">Unharvested KWs</p>
+                    <p class="text-2xl font-bold">23</p>
+                </div>
+                <div class="glass-card">
+                    <p class="text-sm text-slate-400">PPC Reliance</p>
+                    <p class="text-2xl font-bold text-red-400">62%</p>
+                </div>
+                <div class="glass-card">
+                    <p class="text-sm text-slate-400">Spend Dilution</p>
+                    <p class="text-2xl font-bold">62%</p>
+                </div>
+            </div>
+            <div class="glass-card">
+                <h3 class="font-bold mb-4">Market Inefficiencies</h3>
+                <ul class="space-y-4 text-sm">
+                    <li class="bg-black/20 p-3 rounded">23 high-CVR, low-ACOS non-branded KWs remain unharvested</li>
+                    <li class="bg-black/20 p-3 rounded">62% of sales are PPC-driven (38% organic), indicating underperforming organic rankings</li>
+                    <li class="bg-black/20 p-3 rounded">62% of spend is diluted across multiple variations in the same ad group</li>
+                    <li class="bg-black/20 p-3 rounded">15% of spend goes to Product Pages with poor ACOS and CVR</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- DE Deep Dive -->
+        <section id="de-deep-dive" class="page-section hidden-page">
+            <h2 class="text-2xl font-extrabold mb-8">Germany (DE) Deep-Dive</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+                <div class="glass-card">
+                    <p class="text-sm text-slate-400">Unharvested KWs</p>
+                    <p class="text-2xl font-bold">15</p>
+                </div>
+                <div class="glass-card">
+                    <p class="text-sm text-slate-400">ASIN Targeting</p>
+                    <p class="text-2xl font-bold">33%</p>
+                </div>
+                <div class="glass-card">
+                    <p class="text-sm text-slate-400">Spend Dilution</p>
+                    <p class="text-2xl font-bold">68%</p>
+                </div>
+            </div>
+            <div class="glass-card">
+                <h3 class="font-bold mb-4">Market Inefficiencies</h3>
+                <ul class="space-y-4 text-sm">
+                    <li class="bg-black/20 p-3 rounded">15 high-CVR, low-ACOS non-branded KWs remain unharvested</li>
+                    <li class="bg-black/20 p-3 rounded">Spend inefficiency is high, with 68% allocated to multiple variations in the same ad group</li>
+                    <li class="bg-black/20 p-3 rounded">33% allocated to ASIN targeting, which does not drive keyword ranking growth</li>
+                    <li class="bg-black/20 p-3 rounded">TOS spend is only 36%, limiting CVR and organic ranking improvements</li>
+                </ul>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // Navigation Logic
+        function showPage(pageId) {
+            document.querySelectorAll('.page-section').forEach(page => page.classList.add('hidden-page'));
+            document.getElementById(pageId).classList.remove('hidden-page');
+            
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+                if(item.innerText.toLowerCase().includes(pageId.split('-')[0])) {
+                    item.classList.add('active');
+                }
+            });
+        }
+
+        // Theme Management
+        function toggleTheme() {
+            const body = document.body;
+            const icon = document.getElementById('theme-icon');
+            const text = document.getElementById('theme-text');
+            
+            if (body.classList.contains('dark-mode')) {
+                body.classList.remove('dark-mode');
+                body.classList.add('light-mode');
+                icon.innerText = '☀️';
+                text.innerText = 'Light Mode';
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.classList.remove('light-mode');
+                body.classList.add('dark-mode');
+                icon.innerText = '🌙';
+                text.innerText = 'Dark Mode';
+                localStorage.setItem('theme', 'dark');
+            }
+            updateCharts();
+        }
+
+        // Initialize Theme
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'light') {
+            document.body.classList.remove('dark-mode');
+            document.body.classList.add('light-mode');
+            document.getElementById('theme-icon').innerText = '☀️';
+            document.getElementById('theme-text').innerText = 'Light Mode';
+        }
+
+        // Chart.js Implementations
+        let ppcChart, organicChart;
+
+        function updateCharts() {
+            const isDark = document.body.classList.contains('dark-mode');
+            const textColor = isDark ? '#94a3b8' : '#475569';
+            const gridColor = isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)';
+
+            const chartConfig = {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { labels: { color: textColor, font: { family: 'Plus Jakarta Sans' } } }
+                },
+                scales: {
+                    y: { grid: { color: gridColor }, ticks: { color: textColor } },
+                    x: { grid: { color: gridColor }, ticks: { color: textColor } }
+                }
+            };
+
+            if (ppcChart) ppcChart.destroy();
+            if (organicChart) organicChart.destroy();
+
+            const ctxPpc = document.getElementById('ppcChart').getContext('2d');
+            ppcChart = new Chart(ctxPpc, {
+                type: 'bar',
+                data: {
+                    labels: ['USA', 'UK', 'DE'],
+                    datasets: [
+                        {
+                            label: 'PPC Reliance %',
+                            data: [76, 62, 0], // DE PPC reliance not in data
+                            backgroundColor: '#3b82f6',
+                            borderRadius: 6
+                        },
+                        {
+                            label: 'Spend Dilution %',
+                            data: [89, 62, 68],
+                            backgroundColor: '#ef4444',
+                            borderRadius: 6
+                        }
+                    ]
+                },
+                options: chartConfig
+            });
+
+            const ctxOrganic = document.getElementById('organicChart').getContext('2d');
+            organicChart = new Chart(ctxOrganic, {
+                type: 'line',
+                data: {
+                    labels: ['Current', 'Month 3', 'Month 6', 'Month 12'],
+                    datasets: [{
+                        label: 'Organic Visibility (Indicative)',
+                        data: [24, 45, 60, 75],
+                        borderColor: '#10b981',
+                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: chartConfig
+            });
+        }
+
+        window.onload = updateCharts;
+    </script>
+</body>
+</html>
