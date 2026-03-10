@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baby Brand Case Study - GNO Partners</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,600&family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* ===== PAGE 1 STYLES ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f8f7f4 0%, #e8e5de 100%);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Logo in top left */
+        .logo-header {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+        }
+
+        .logo {
+            height: 40px;
+            width: auto;
+        }
+
+        /* Main container */
+        .main-content {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            padding: 80px 30px 30px 30px;
+            align-items: flex-start;
+            min-height: 0;
+            position: relative;
+        }
+
+        /* Left section - Image in container */
+        .image-section {
+            display: flex;
+            justify-content: center;
+            padding-top: 20px;
+        }
+
+        .image-container {
+            width: 100%;
+            max-width: 320px;
+            aspect-ratio: 3/4;
+            background: white;
+            border: 2px dashed #d4cec5;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 14px;
+            text-align: center;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            animation: slideInLeft 0.8s ease-out;
+        }
+
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* Right section - Text and Form */
+        .right-section {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            animation: slideInRight 0.8s ease-out;
+            padding-top: 20px;
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            line-height: 1.15;
+            color: #1a1a1a;
+            margin-bottom: 16px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        h1 em {
+            font-style: italic;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            font-size: 0.95rem;
+            color: #5a5a5a;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .form-container {
+            background: white;
+            padding: 28px;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .form-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: #1a1a1a;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 18px;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-group:last-of-type {
+            margin-bottom: 0;
+        }
+
+        input {
+            width: 100%;
+            padding: 11px 13px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 13px;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            background: #f9f9f9;
+        }
+
+        input:focus {
+            outline: none;
+            background: white;
+            border-color: #c9a57d;
+            box-shadow: 0 0 0 3px rgba(201, 165, 125, 0.1);
+        }
+
+        input::placeholder {
+            color: #bbb;
+        }
+
+        .button-container {
+            margin-top: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            background: linear-gradient(135deg, #c9a57d 0%, #b8934d 100%);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(201, 165, 125, 0.3);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(201, 165, 125, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .benefits {
+            display: flex;
+            gap: 14px;
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 1px solid #e0e0e0;
+            font-size: 12px;
+            color: #5a5a5a;
+            flex-wrap: wrap;
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .checkmark {
+            color: #c9a57d;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #999;
+            font-size: 11px;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        footer a {
+            color: #c9a57d;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: #b8934d;
+            text-decoration: underline;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                padding: 80px 20px 20px 20px;
+            }
+            h1 { font-size: 2.2rem; }
+        }
+
+        @media (max-width: 768px) {
+            .main-content { padding: 80px 20px 20px 20px; }
+            h1 { font-size: 1.8rem; }
+            .image-container { max-width: 200px; }
+            .form-container { padding: 20px; }
+        }
+
+        /* ===== PAGE 2 (TY) STYLES ===== */
+        :root {
+            --primary: #1f3a2e;
+            --accent: #c9a876;
+            --accent-dark: #b39564;
+            --light-bg: #faf8f6;
+            --text-primary: #2c2c2c;
+            --text-secondary: #666;
+            --border: #f0ebe5;
+        }
+
+        #ty-page {
+            display: none;
+            font-family: 'Sora', sans-serif;
+            background: linear-gradient(135deg, var(--light-bg) 0%, #f5f1ed 100%);
+            color: var(--text-primary);
+            line-height: 1.6;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        #ty-page.active {
+            display: flex;
+        }
+
+        .ty-logo-header {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 100;
+            animation: slideInLeft 0.8s ease-out;
+        }
+
+        .ty-logo-header .logo {
+            height: 40px;
+            width: auto;
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 20px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(232, 168, 184, 0.12) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 20s ease-in-out infinite;
+            z-index: 0;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(30px); }
+        }
+
+        .hero-content {
+            max-width: 900px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+
+        .success-message {
+            animation: slideInDown 0.8s ease-out;
+        }
+
+        @keyframes slideInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 48px;
+            font-weight: 600;
+            line-height: 1.2;
+            color: var(--primary);
+            margin-bottom: 15px;
+            letter-spacing: -0.5px;
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+            line-height: 1.7;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero p {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-bottom: 25px;
+            line-height: 1.7;
+        }
+
+        .vsl-section {
+            background: white;
+            padding: 40px 20px;
+            margin-bottom: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            animation: slideInUp 0.8s ease-out 0.1s both;
+        }
+
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .vsl-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 20px;
+            line-height: 1.3;
+        }
+
+        .vsl-subtitle {
+            font-size: 16px;
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+            line-height: 1.6;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .video-placeholder {
+            aspect-ratio: 16/9;
+            background: linear-gradient(135deg, #f5f1ed 0%, #ede8e3 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px dashed var(--border);
+            margin-bottom: 25px;
+            min-height: 300px;
+        }
+
+        .play-button {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 32px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            box-shadow: 0 8px 24px rgba(232, 168, 184, 0.3);
+            width: 80px !important;
+            padding: 0 !important;
+            border: none;
+        }
+
+        .play-button:hover {
+            transform: scale(1.1) !important;
+            box-shadow: 0 8px 24px rgba(232, 168, 184, 0.3) !important;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 14px 32px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(232, 168, 184, 0.3);
+            margin: 10px;
+            width: auto !important;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 12px 28px rgba(232, 168, 184, 0.4) !important;
+        }
+
+        .cta-container {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .limited-spots {
+            font-size: 13px;
+            color: var(--accent);
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .trust-widget {
+            text-align: center;
+            margin: 35px 0;
+            padding: 20px;
+            background: rgba(232, 168, 184, 0.05);
+            border-radius: 12px;
+        }
+
+        .trust-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .trust-score {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .testimonials-section {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            font-weight: 600;
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 40px;
+            letter-spacing: -0.5px;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .testimonial-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 1px solid var(--border);
+        }
+
+        .stars {
+            color: var(--accent);
+            font-size: 16px;
+            margin-bottom: 12px;
+        }
+
+        .testimonial-text {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .testimonial-role {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-top: 3px;
+        }
+
+        .form-section {
+            background: white;
+            padding: 50px 20px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            margin-bottom: 40px;
+            animation: slideInUp 0.8s ease-out 0.2s both;
+        }
+
+        .form-section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 32px;
+            font-weight: 600;
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 15px;
+            letter-spacing: -0.5px;
+        }
+
+        .form-subtitle {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-bottom: 35px;
+            font-size: 15px;
+        }
+
+        .typeform-placeholder {
+            background: linear-gradient(135deg, #f5f1ed 0%, #ede8e3 100%);
+            padding: 40px;
+            border-radius: 12px;
+            text-align: center;
+            color: var(--text-secondary);
+            border: 2px dashed var(--border);
+            min-height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .ty-footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-secondary);
+            font-size: 13px;
+            border-top: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.5);
+            margin-top: auto;
+            font-family: 'Sora', sans-serif;
+        }
+
+        .ty-footer a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .ty-footer a:hover {
+            color: var(--accent-dark);
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 32px; }
+            .section-title { font-size: 26px; }
+            .vsl-title { font-size: 22px; }
+            .cta-button { display: block; width: 100%; max-width: 300px; margin: 10px auto; }
+            .testimonials-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== PAGE 1 ===== -->
+    <div id="page1">
+        <!-- Logo Header -->
+        <div class="logo-header">
+            <img src="https://gnopartners.com/wp-content/uploads/2025/01/dd.png" alt="GNO Partners Logo" class="logo">
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Left: Image Container -->
+            <div class="image-section">
+                <div class="image-container">
+                    [CASE STUDY MOCKUP IMAGE]
+                </div>
+            </div>
+
+            <!-- Right: Heading and Form -->
+            <div class="right-section">
+                <h1>How An Established Baby Brand <em>Doubled</em> Marketplace Profits</h1>
+                <p class="subtitle">Discover The Growth Strategies That Turned A Stagnant P&L Into A Scalable Profit Engine</p>
+
+                <div class="form-container">
+                    <div class="form-title">Fill In Your Information Below For Instant Access</div>
+
+                    <div id="caseStudyForm">
+                        <div class="form-group">
+                            <input type="text" placeholder="First Name" name="firstName" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" placeholder="Email Address" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" placeholder="Company Name" name="company" required>
+                        </div>
+                        <div class="button-container">
+                            <button type="button" onclick="handleSubmit()">Get Free Case Study</button>
+                        </div>
+                    </div>
+
+                    <div class="benefits">
+                        <div class="benefit-item">
+                            <span class="checkmark">✓</span>
+                            <span>Instant Access</span>
+                        </div>
+                        <div class="benefit-item">
+                            <span class="checkmark">✓</span>
+                            <span>No Credit Card</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>&copy; 2026 GNO Partners. All Rights Reserved. | 
+                <a href="#">Privacy Policy</a> | 
+                <a href="#">Terms of Service</a>
+            </p>
+        </footer>
+    </div>
+
+
+    <!-- ===== PAGE 2 (TY) ===== -->
+    <div id="ty-page">
+        <div class="ty-logo-header">
+            <img src="https://gnopartners.com/wp-content/uploads/2025/01/dd.png" alt="GNO Partners Logo" class="logo">
+        </div>
+
+        <!-- HERO SECTION -->
+        <section class="hero">
+            <div class="hero-content">
+                <div class="success-message">
+                    <h1>The Case Study Is On Its Way To Your Inbox</h1>
+                    <p class="hero-subtitle">While You Wait...</p>
+                    <p class="hero-subtitle" style="font-weight: 500; color: var(--primary);">Bonus: A Complete Walkthrough Of The Case Study With Our Head Consultant So You Can Apply The Same Growth Strategies To Your Business</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- VSL SECTION -->
+        <div style="max-width: 900px; margin: 0 auto; padding: 0 20px;">
+            <div class="vsl-section">
+                <h2 class="vsl-title">Watch This Video First</h2>
+                <p class="vsl-subtitle">A complete walkthrough showing exactly how we achieved these results and how you can apply the same strategies</p>
+
+                <div class="video-placeholder">
+                    <button class="play-button">▶</button>
+                </div>
+
+                <div class="cta-container">
+                    <button class="cta-button" onclick="document.querySelector('.form-section').scrollIntoView({behavior: 'smooth'})">Claim My Brand Analysis</button>
+                    <div class="limited-spots">⚡ Spots Extremely Limited</div>
+                </div>
+
+                <div class="trust-widget">
+                    <div class="trust-label">Trusted By 1000+ Brands</div>
+                    <div class="trust-score">4.9 ⭐</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TESTIMONIALS SECTION -->
+        <section class="testimonials-section">
+            <h2 class="section-title">Here's What Our Clients Have To Say</h2>
+
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">"The strategies we learned completely transformed our approach. We saw a 300% increase in qualified leads within 3 months."</p>
+                    <div class="testimonial-author">Sarah Martinez</div>
+                    <div class="testimonial-role">E-Commerce Manager, TechBrand Co.</div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">"Implementing these tactics was straightforward and the ROI was immediate. This case study saved us months of trial and error."</p>
+                    <div class="testimonial-author">Michael Chen</div>
+                    <div class="testimonial-role">Founder, Digital Growth Studios</div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">"The walkthrough was incredibly detailed. Our team understood exactly what to do and we launched within 2 weeks."</p>
+                    <div class="testimonial-author">Jessica Thompson</div>
+                    <div class="testimonial-role">Head of Marketing, RetailPro Inc.</div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">"Exceptional value. The breakdown of each step made it easy to replicate the success. Highly recommend to anyone scaling."</p>
+                    <div class="testimonial-author">David Kumar</div>
+                    <div class="testimonial-role">VP Growth, SaaS Accelerator</div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">"We went from 2M to 8M in annual revenue using these exact strategies. This is the real deal."</p>
+                    <div class="testimonial-author">Emma Rodriguez</div>
+                    <div class="testimonial-role">CEO, Fashion Forward Brands</div>
+                </div>
+                <div class="testimonial-card">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">"The case study paid for itself 50x over. Best investment we've made this year. Clear, actionable, and results-driven."</p>
+                    <div class="testimonial-author">Robert Walsh</div>
+                    <div class="testimonial-role">Owner, Multi-Brand Portfolio</div>
+                </div>
+            </div>
+
+            <div class="trust-widget">
+                <div class="trust-label">Join 1000+ Satisfied Customers</div>
+                <div class="trust-score">4.9 out of 5 ⭐</div>
+            </div>
+
+            <div style="text-align: center; margin-top: 40px;">
+                <button class="cta-button" onclick="document.querySelector('.form-section').scrollIntoView({behavior: 'smooth'})">Claim My Brand Analysis</button>
+                <div class="limited-spots">⚡ Spots Extremely Limited</div>
+            </div>
+        </section>
+
+        <!-- FORM SECTION -->
+        <div style="max-width: 900px; margin: 0 auto; padding: 0 20px;">
+            <section class="form-section" id="form-section">
+                <h2>Answer A Few Quick Questions To Claim Your Free Brand Analysis</h2>
+                <p class="form-subtitle">This helps us understand your business so we can provide the most relevant insights</p>
+
+                <div class="typeform-placeholder">
+                    [Embed Typeform Form Here]
+                    <br><br>
+                    Replace this with: &lt;div class="typeform-embed" data-url="YOUR_TYPEFORM_URL"&gt;&lt;/div&gt;
+                    <br>
+                    Add script tag: &lt;script src="https://embed.typeform.com/embed.js"&gt;&lt;/script&gt;
+                </div>
+
+                <div class="trust-widget" style="margin-top: 30px;">
+                    <div class="trust-label">Trusted By Industry Leaders</div>
+                    <div class="trust-score">4.9 ⭐</div>
+                </div>
+            </section>
+        </div>
+
+        <!-- FOOTER -->
+        <footer class="ty-footer">
+            <p>&copy; 2026 GNO Partners. All Rights Reserved. | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+        </footer>
+    </div>
+
+
+    <script>
+        function handleSubmit() {
+            const firstName = document.querySelector('input[name="firstName"]').value.trim();
+            const email = document.querySelector('input[name="email"]').value.trim();
+            const company = document.querySelector('input[name="company"]').value.trim();
+
+            if (!firstName || !email || !company) {
+                alert('Please fill in all fields.');
+                return;
+            }
+
+            // Hide page 1, show ty page
+            document.getElementById('page1').style.display = 'none';
+            document.body.style.background = 'none';
+            const tyPage = document.getElementById('ty-page');
+            tyPage.classList.add('active');
+            window.scrollTo(0, 0);
+        }
+    </script>
+</body>
+</html>
+​
